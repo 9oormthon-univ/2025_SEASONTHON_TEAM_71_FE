@@ -5,12 +5,12 @@ import styled from 'styled-components';
 const FooterBtn = styled.button`
   display: flex;
   width: 100%;
-  height: 56px;
+  height: clamp(48px, 6vw, 56px);
   text-align: center;
   align-items: center;
   justify-content: center;
   font-family: 'Pretendard-SemiBold';
-  font-size: 16px;
+  font-size: clamp(14px, 2vw, 18px);
   color: #FFFFFF;
   background-color: #111111;
   border: none;
