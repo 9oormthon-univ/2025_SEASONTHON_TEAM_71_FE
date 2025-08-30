@@ -3,7 +3,7 @@
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import JoinHeader from '../components/JoinHeader';
-import Bottom from "../components/Bottom"
+import Footer from "../components/Footer"
 import { MainContainer } from '../styles/MainContainer.style';
 
 export default function JoinLayout() {
@@ -14,7 +14,7 @@ export default function JoinLayout() {
         <MainContainer>
           <Outlet />
         </MainContainer>
-        <Bottom />
+        <Footer />
       </LayoutWrapper>
     </>
   );

@@ -3,18 +3,23 @@
 import styled from 'styled-components';
 
 const FooterBtn = styled.button`
+  width: clamp(280px, 89vw, 335px);
+  height: clamp(48px, 13vw, 56px);
+  padding: 0;
+
   display: flex;
-  width: 100%;
-  height: clamp(48px, 6vw, 56px);
   text-align: center;
   align-items: center;
   justify-content: center;
-  font-family: 'Pretendard-SemiBold';
-  font-size: clamp(14px, 2vw, 18px);
-  color: #FFFFFF;
+
   background-color: #111111;
   border: none;
   border-radius: 12px;
+  
+  font-family: 'Pretendard-SemiBold';
+  font-size: clamp(14px, 4vw, 16px);
+  color: #FFFFFF;
+  
   cursor: pointer;
 `;
 

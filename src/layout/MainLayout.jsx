@@ -3,7 +3,7 @@
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import HomeHeader from '../components/HomeHeader';
-import Bottom from "../components/Bottom"
+import Footer from "../components/Footer"
 import { MainContainer } from '../styles/MainContainer.style';
 
 export default function MainLayout() {
@@ -14,7 +14,7 @@ export default function MainLayout() {
         <MainContainer>
           <Outlet />
         </MainContainer>
-        <Bottom />
+        <Footer />
       </LayoutWrapper>
     </>
   );
