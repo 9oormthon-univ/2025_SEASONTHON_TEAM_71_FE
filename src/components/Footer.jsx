@@ -48,5 +48,6 @@ const FooterText = styled.div`
         font-size: 12px;
         font-family: "Pretendard-Medium";
         color: #111111;
+        cursor: pointer;
     }
 `

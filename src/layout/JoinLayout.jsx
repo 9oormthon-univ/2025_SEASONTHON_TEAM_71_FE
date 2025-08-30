@@ -10,7 +10,6 @@ export default function JoinLayout() {
   return (
     <>
       <LayoutWrapper>
-        <JoinHeader />
         <MainContainer>
           <Outlet />
         </MainContainer>
