@@ -12,7 +12,7 @@ const FooterBtn = styled.button`
   align-items: center;
   justify-content: center;
 
-  background-color: #111111;
+  background-color: #142CA6;
   border: none;
   border-radius: 12px;
   
