@@ -15,7 +15,7 @@ function App() {
         <Route path="/join">
           <Route index element={<Navigate to="category" replace />} />
           <Route path="category" element={<JoinCategory />} />
-          <Route path=":role/info" element={<JoinInfo />} />
+          <Route path=":id/info" element={<JoinInfo />} />
         </Route>
       </Route>
 

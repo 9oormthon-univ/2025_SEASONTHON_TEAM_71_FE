@@ -3,7 +3,7 @@
 import styled from 'styled-components';
 
 const FooterBtn = styled.button`
-  width: clamp(280px, 89vw, 335px);
+  width: 100%;
   height: clamp(48px, 13vw, 56px);
   padding: 0;
 
@@ -12,7 +12,7 @@ const FooterBtn = styled.button`
   align-items: center;
   justify-content: center;
 
-  background-color: #142CA6;
+  background-color: ${(props) => (props.reverse == 'true' ? '#142CA6' : '#5697E1')};
   border: none;
   border-radius: 12px;
   
@@ -23,10 +23,12 @@ const FooterBtn = styled.button`
   cursor: pointer;
 `;
 
-export const Button = ({ text, onClick }) => {
+export const Button = ({ text, onClick, reverse, type = "button", ...props }) => {
   return (
     <FooterBtn
+      type={type} 
       onClick={onClick}
+      reverse={reverse ? 'true' : 'false'}
     >
       {text}
     </FooterBtn>
