@@ -2,6 +2,8 @@
 
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import UserIcon from "../../assets/img/Icon_user.svg";
+import CompanyIcon from "../../assets/img/Icon_company.svg";
 
 const CategoryWrapper = styled.div`
     flex: 1;
@@ -10,6 +12,25 @@ const CategoryWrapper = styled.div`
     justify-content: center;
     align-items: center;
     width: 100%;
+
+    div {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 36px;
+    }
+
+    h1 {
+        font-family: "Pretendard-SemiBold";
+        font-size: 24px;
+        color: #111111;
+    }
+
+    h6 {
+        font-family: "Pretendard-Medium";
+        font-size: 15px;
+        color: #999999;
+    }
+
 `
 
 /** 버튼 묶음: 3열 */
@@ -22,76 +43,72 @@ const BtnWrapper = styled.div`
     gap: 11px;
 `;
 
-// const BtnWrapper = styled.div`
-//   display: grid;
-//   /* 버튼 크기에 맞춰 3열·2행(삼각형) */
-//   grid-template-columns: repeat(3, 100px);
-//   grid-template-rows: repeat(2, 100px);
-//   gap: 12px 28px;               /* 간격만 조절, margin/padding 불필요 */
-//   justify-content: center;      /* 그리드를 가로 중앙 */
-//   align-content: center;        /* 그리드를 세로 중앙 */
-
-//   /* 1: 개인(좌상), 2: 기업(우상), 3: 컨설턴트(하단 중앙) */
-//   & > button:nth-child(1) { grid-column: 1; grid-row: 1; }
-//   & > button:nth-child(2) { grid-column: 3; grid-row: 1; }
-//   & > button:nth-child(3) { grid-column: 2; grid-row: 2; }
-
-//   /* 좁은 화면에서는 2열로 자동 재배치 */
-//   @media (max-width: 420px) {
-//     grid-template-columns: repeat(2, 100px);
-//     grid-template-rows: repeat(2, 100px);
-//     gap: 12px 16px;
-
-//     & > button:nth-child(1) { grid-column: 1; grid-row: 1; }
-//     & > button:nth-child(2) { grid-column: 2; grid-row: 1; }
-//     & > button:nth-child(3) { grid-column: 1 / span 2; grid-row: 2; justify-self: center; }
-//   }
-// `;
-
 /** 원형 버튼 */
 const CircleBtn = styled.button`
-    width: 100px;
-    height: 100px;
+    width: 160px;
+    height: 160px;
     border-radius: 9999px;
     border: none;
-    background: linear-gradient(180deg, #dbdbdb 0%, #bfbfbf 100%);
+    background: ${({ $id }) =>
+        $id === "user"
+            ? "#142CA6" // 개인
+            : "#5697E1"}; // 기업
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
 
     display: flex;
-    align-items: flex-end;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    padding: 0 0 16px 0;
-
-    color: #111;
-    font-family: "Pretendard-SemiBold";
-    font-size: 15px;
 
     cursor: pointer;
+
+    img {
+        width: ${({ $id }) => ($id === "user" ? "47px" : "78.22px")};
+        height: ${({ $id }) => ($id === "user" ? "56.05px" : "64px")};
+        margin-bottom: 12.3px;
+    }
+
+    p {
+        color: #FFFFFF;
+        font-family: "Pretendard-SemiBold";
+        font-size: 20px;
+    }
+
 `;
 
 
 const JoinCategory = () => {
     const navigate = useNavigate();
 
-    const role = [
-        { role: "user", label: "개인" },
-        { role: "owner", label: "기업" },
-        { role: "consultant", label: "컨설턴트" },
-    ];
-
-    const handleNext = (role) => navigate(`/join/${role}/info`);
+    const handleNext = (id) => navigate(`/join/${id}/info`);
 
     return (
         <CategoryWrapper>
-            <BtnWrapper>
-                {role.map(({ role, label }) => (
+            <div>
+                <h1>가입방식선택</h1>
+                <h6>회원님의 상태를 선택해주세요</h6>
+            </div>
+            {/* <BtnWrapper>
+                {["user", "owner"].map((id) => (
                     <CircleBtn
-                        key={role}
+                        key={id}
                         type="button"
-                        onClick={() => handleNext(role)}
+                        onClick={() => handleNext(id)}
                     >
-                        {label}
+                        <p>{id == "user" ? "개인" : "기업"}</p>
                     </CircleBtn>
                 ))}
+            </BtnWrapper> */}
+
+            <BtnWrapper>
+                <CircleBtn $id="user" onClick={() => handleNext("user")}>
+                    <img src={UserIcon} alt="개인" />
+                    <p>개인</p>
+                </CircleBtn>
+                <CircleBtn $id="owner" onClick={() => handleNext("owner")}>
+                    <img src={CompanyIcon} alt="기업" />
+                    <p>기업</p>
+                </CircleBtn>
             </BtnWrapper>
         </CategoryWrapper>
     );
