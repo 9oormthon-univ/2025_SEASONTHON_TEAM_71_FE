@@ -6,7 +6,6 @@ export const MainContainer = styled.div`
     flex-direction: column;
     justify-content: space-between;
     align-items: center; 
-    padding: 1rem;
     box-sizing: border-box;
 
     /* 기본: Galaxy Z Fold 5 (344px) */

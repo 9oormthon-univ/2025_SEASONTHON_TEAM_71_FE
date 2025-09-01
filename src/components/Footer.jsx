@@ -16,7 +16,7 @@ export default function Footer() {
 
 const FooterWrapper = styled.div`
     height: 79px;
-    background-color: #F1F3F5;
+    background-color: #E0E0E0;
     box-sizing: border-box;
 
     /* 기본: Galaxy Z Fold 5 (344px) */
@@ -48,5 +48,6 @@ const FooterText = styled.div`
         font-size: 12px;
         font-family: "Pretendard-Medium";
         color: #111111;
+        cursor: pointer;
     }
 `

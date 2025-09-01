@@ -2,15 +2,13 @@
 
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
-import JoinHeader from '../components/JoinHeader';
 import Footer from "../components/Footer"
-import { MainContainer } from '../styles/MainContainer.style';
+import { MainContainer } from "../styles/MainContainer.style";
 
 export default function JoinLayout() {
   return (
     <>
       <LayoutWrapper>
-        <JoinHeader />
         <MainContainer>
           <Outlet />
         </MainContainer>
