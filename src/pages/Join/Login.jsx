@@ -91,6 +91,23 @@ export default function Login() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
+  const [id, setId] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = () => {
+    if (!id.trim()) {
+      alert("아이디를 입력해주세요.");
+      return;
+    }
+
+    if (password.length < 8) {
+      alert("비밀번호는 8자 이상이어야 합니다.");
+      return;
+    }
+
+    navigate("/home");
+  };
+
   return (
     <LoginWrapper>
       {/* 로고 */}
@@ -100,7 +117,12 @@ export default function Login() {
       <InputSection>
         <Label>아이디</Label>
         <IDWrapper>
-          <Input type="text" placeholder="아이디를 입력하세요." />
+          <Input
+            type="text"
+            placeholder="아이디를 입력하세요."
+            value={id}
+            onChange={(e) => setId(e.target.value)}
+          />
         </IDWrapper>
 
         <Label>비밀번호</Label>
@@ -108,6 +130,8 @@ export default function Login() {
           <Input
             type={showPassword ? "text" : "password"}
             placeholder="비밀번호를 입력하세요"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <ToggleBtn onClick={() => setShowPassword(!showPassword)}>
             {showPassword ? (
@@ -121,7 +145,7 @@ export default function Login() {
 
       {/* 로그인 버튼 */}
       <LoginBtn>
-        <Button text="로그인" reverse onClick={() => navigate("/home")} />
+        <Button text="로그인" reverse onClick={handleLogin} />
       </LoginBtn>
       <SignupText onClick={() => navigate("/join")}>회원가입</SignupText>
     </LoginWrapper>
