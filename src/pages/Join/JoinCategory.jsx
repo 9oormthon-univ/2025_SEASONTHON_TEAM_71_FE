@@ -16,18 +16,18 @@ const CategoryWrapper = styled.div`
     div {
         width: 100%;
         text-align: center;
-        margin-bottom: 36px;
+        margin-bottom: clamp(20px, 8vw, 36px);
     }
 
     h1 {
         font-family: "Pretendard-SemiBold";
-        font-size: 24px;
+        font-size: clamp(18px, 5.5vw, 24px);
         color: #111111;
     }
 
     h6 {
         font-family: "Pretendard-Medium";
-        font-size: 15px;
+        font-size: clamp(12px, 3.5vw, 15px);
         color: #999999;
     }
 
@@ -38,19 +38,19 @@ const BtnWrapper = styled.div`
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: center;
     align-items: center;
-    gap: 11px;
+    justify-content: center;
+    gap: clamp(8px, 3vw, 16px);
 `;
 
 /** 원형 버튼 */
 const CircleBtn = styled.button`
-    width: 160px;
-    height: 160px;
-    border-radius: 9999px;
+    width: clamp(100px, 40vw, 160px);
+    height: clamp(100px, 40vw, 160px);
+    border-radius: 50%;
     border: none;
-    background: ${({ $id }) =>
-        $id === "user"
+    background: ${({ $role }) =>
+        $role === "user"
             ? "#142CA6" // 개인
             : "#5697E1"}; // 기업
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
@@ -63,15 +63,22 @@ const CircleBtn = styled.button`
     cursor: pointer;
 
     img {
-        width: ${({ $id }) => ($id === "user" ? "47px" : "78.22px")};
-        height: ${({ $id }) => ($id === "user" ? "56.05px" : "64px")};
-        margin-bottom: 12.3px;
-    }
+        width: ${({ $role }) =>
+            $role === "user"
+                ? "clamp(30px, 15vw, 47px)"
+                : "clamp(50px, 15vw, 78.22px)"};
+        height: ${({ $role }) =>
+            $role === "user"
+                ? "clamp(36px, 12vw, 56.05px)"
+                : "clamp(40px, 12vw, 64px)"};
+        margin-bottom: clamp(8px, 3vw, 12.3px);
+  }
 
     p {
         color: #FFFFFF;
         font-family: "Pretendard-SemiBold";
         font-size: 20px;
+        font-size: clamp(14px, 5vw, 20px);
     }
 
 `;
@@ -80,7 +87,7 @@ const CircleBtn = styled.button`
 const JoinCategory = () => {
     const navigate = useNavigate();
 
-    const handleNext = (id) => navigate(`/join/${id}/info`);
+    const handleNext = (role) => navigate(`/join/${role}/info`);
 
     return (
         <CategoryWrapper>
@@ -101,11 +108,11 @@ const JoinCategory = () => {
             </BtnWrapper> */}
 
             <BtnWrapper>
-                <CircleBtn $id="user" onClick={() => handleNext("user")}>
+                <CircleBtn $role="user" onClick={() => handleNext("user")}>
                     <img src={UserIcon} alt="개인" />
                     <p>개인</p>
                 </CircleBtn>
-                <CircleBtn $id="owner" onClick={() => handleNext("owner")}>
+                <CircleBtn $role="owner" onClick={() => handleNext("owner")}>
                     <img src={CompanyIcon} alt="기업" />
                     <p>기업</p>
                 </CircleBtn>

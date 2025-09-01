@@ -1,251 +1,306 @@
 // 회원가입 회원정보입력 페이지
-
 import styled from "styled-components";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import {Button} from "../../components/Button";
+import { Button } from "../../components/Button";
 import JoinHeader from "../../components/JoinHeader";
 
-export default function JoinInfo () {
-    const { id } = useParams(); // 'user' or 'owner'
+export default function JoinInfo() {
+  const { role } = useParams(); // 'user' or 'owner'
+  const isRole = role === "owner"; // 기업이면 true
+  const roleText = isRole ? "기업" : "개인"; // UI 표기용
+  const reverse = !isRole;
 
-    const [username, setUsername] = useState("");   // 아이디
-    const [password, setPassword] = useState("");   // 비밀번호
-    const [passwordConfirm, setPasswordConfirm] = useState(""); // 비밀번호 확인
-    const [name, setName] = useState("");           // 이름
-    const [email, setEmail] = useState("");         // 이메일
-    const [phone, setPhone] = useState("");         // 휴대폰 번호
-    const [jobInterest, setJobInterest] = useState(""); // 관심 직무
-    const [skills, setSkills] = useState("");       // 보유 역량
-    const [intro, setIntro] = useState("");         // 자기소개
-    const [resume, setResume] = useState(null);     // 이력서 파일
+  // 공통 상태
+  const [ID, setUserID] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [name, setName] = useState("");
 
-    return (
-        <>
-        <JoinHeader text="개인" reverse={true}/>
+  // 개인용 상태
+  const [email, setEmail] = useState(""); // 이메일
+  const [phone, setPhone] = useState(""); // 휴대폰 번호
+  const [jobInterest, setJobInterest] = useState(""); // 관심 직무
+  const [skills, setSkills] = useState(""); // 보유 역량
+  const [intro, setIntro] = useState(""); // 간단 자기소개
+  const [resume, setResume] = useState(null); // 이력서 첨부
 
-        <JoinWrapper>
-            <Title>
-               <h1>회원정보입력</h1>
-               <h6>회원님의 정보를 입력해주세요</h6>
-            </Title>
+  // 기업용 상태
+  const [organization, setOrganization] = useState(""); // 소속기관
 
-            <InputWrapper>
-                <Form onSubmit={(e) => {
-                    e.preventDefault();
-                    // TODO: 회원가입 처리 로직 (API 호출 등)
-                }}>
-                    <InputBlock>
-                        <InputTitle>
-                            <Req>*</Req>
-                            아이디
-                        </InputTitle>
-                        <input 
-                            type="text"
-                            name="username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            autoComplete="username"
-                            required
-                        />
-                    </InputBlock>
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-                    <InputBlock>
-                        <InputTitle>
-                            <Req>*</Req>
-                            비밀번호
-                        </InputTitle>
-                        <input 
-                            type="password"
-                            name="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            autoComplete="new-password"
-                            required
-                        />
-                    </InputBlock>
+    if (password !== passwordConfirm) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
 
-                    <InputBlock>
-                        <InputTitle>
-                            <Req>*</Req>
-                            비밀번호 확인
-                        </InputTitle>
-                        <input 
-                            type="password"
-                            name="passwordConfirm"
-                            value={passwordConfirm}
-                            onChange={(e) => setPasswordConfirm(e.target.value)}
-                            autoComplete="new-password"
-                            required
-                        />
-                    </InputBlock>
+    // 페이로드를 역할에 맞게 구성
+    const payload = isRole
+      ? {
+          role: "owner",
+          ID,
+          password,
+          name,
+          organization,
+        }
+      : {
+          role: "user",
+          ID,
+          password,
+          name,
+          email,
+          phone,
+          jobInterest,
+          skills,
+          intro,
+          resume,
+        };
 
-                    <DivideLine/>
+    console.log("submit payload:", payload);
+    // TODO: API 호출
+  };
 
-                    <InputBlock>
-                        <InputTitle>
-                            <Req>*</Req>
-                            이름
-                        </InputTitle>
-                        <input 
-                            type="text"
-                            name="name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                        />
-                    </InputBlock>
+  return (
+    <>
+      {/* 헤더 텍스트도 역할에 맞게 */}
+      <JoinHeader text={roleText} reverse={reverse} />
 
-                    <InputBlock>
-                        <InputTitle>
-                            <Req>*</Req>
-                            이메일
-                        </InputTitle>
-                        <input 
-                            type="email"
-                            name="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            autoComplete="email"
-                            required
-                        />
-                    </InputBlock>
+      <JoinWrapper>
+        <Title>
+          <h1>회원정보입력</h1>
+          <h6>회원님의 정보를 입력해주세요</h6>
+        </Title>
 
-                    <InputBlock>
-                        <InputTitle>
-                            <Req>*</Req>
-                            휴대폰 번호
-                        </InputTitle>
-                        <input 
-                            type="tel"
-                            name="phone"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            autoComplete="tel"
-                            required
-                        />
-                    </InputBlock>
+        <InputWrapper>
+          <Form onSubmit={handleSubmit}>
+            {/* 공통: 아이디/비밀번호 */}
+            <InputBlock>
+              <InputTitle>
+                <Req>*</Req>아이디
+              </InputTitle>
+              <input
+                type="text"
+                name="ID"
+                value={ID}
+                onChange={(e) => setUserID(e.target.value)}
+                autoComplete="ID"
+                required
+              />
+            </InputBlock>
 
-                    <InputBlock>
-                        <InputTitle>
-                            <Req>*</Req>
-                            관심직무
-                        </InputTitle>
-                        <input 
-                            type="text"
-                            name="jobInterest"
-                            value={jobInterest}
-                            onChange={(e) => setJobInterest(e.target.value)}
-                            required
-                        />
-                    </InputBlock>
+            <InputBlock>
+              <InputTitle>
+                <Req>*</Req>비밀번호
+              </InputTitle>
+              <input
+                type="password"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="new-password"
+                required
+              />
+            </InputBlock>
 
-                    <InputBlock>
-                        <InputTitle>
-                            <Req>*</Req>
-                            보유 역량
-                        </InputTitle>
-                        <input 
-                            type="text"
-                            name="skills"
-                            value={skills}
-                            onChange={(e) => setSkills(e.target.value)}
-                            required
-                        />
-                    </InputBlock>
+            <InputBlock>
+              <InputTitle>
+                <Req>*</Req>비밀번호 확인
+              </InputTitle>
+              <input
+                type="password"
+                name="passwordConfirm"
+                value={passwordConfirm}
+                onChange={(e) => setPasswordConfirm(e.target.value)}
+                autoComplete="new-password"
+                required
+              />
+            </InputBlock>
 
-                    <InputBlock>
-                        <InputTitle>
-                            <Req></Req> 
-                            간단한 자기소개
-                        </InputTitle>
-                        <input 
-                            name="intro"
-                            value={intro}
-                            onChange={(e) => setIntro(e.target.value)}
-                        />
-                    </InputBlock>
+            <DivideLine />
 
-                    <InputBlock>
-                        <InputTitle>
-                            <Req></Req>
-                            이력서 첨부
-                        </InputTitle>
-                        <input 
-                            type="file"
-                            name="resume"
-                            accept=".pdf"
-                            onChange={(e) => setResume(e.target.files[0])}
-                        />
-                    </InputBlock>
-                    <ButtonRow>
-                        <Button text="개인으로 회원가입" reverse={true} type="submit"/>
-                    </ButtonRow>
-                </Form>
-            </InputWrapper>
-        </JoinWrapper>
-        </>
-    )
+            {/* 공통: 이름 */}
+            <InputBlock>
+              <InputTitle>
+                <Req>*</Req>이름
+              </InputTitle>
+              <input
+                type="text"
+                name="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </InputBlock>
+
+            {/* 역할별 분기 */}
+            {isRole ? (
+              // 기업(OWNER): 소속기관만 추가 
+              <InputBlock>
+                <InputTitle>
+                  <Req>*</Req>소속기관
+                </InputTitle>
+                <input
+                  type="text"
+                  name="organization"
+                  value={organization}
+                  onChange={(e) => setOrganization(e.target.value)}
+                  required
+                />
+              </InputBlock>
+            ) : (
+              // 개인(USER): 상세 필드들 
+              <>
+                <InputBlock>
+                  <InputTitle>
+                    <Req>*</Req>이메일
+                  </InputTitle>
+                  <input
+                    type="email"
+                    name="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    autoComplete="email"
+                    required
+                  />
+                </InputBlock>
+
+                <InputBlock>
+                  <InputTitle>
+                    <Req>*</Req>휴대폰 번호
+                  </InputTitle>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    autoComplete="tel"
+                    required
+                  />
+                </InputBlock>
+
+                <InputBlock>
+                  <InputTitle>
+                    <Req>*</Req>관심직무
+                  </InputTitle>
+                  <input
+                    type="text"
+                    name="jobInterest"
+                    value={jobInterest}
+                    onChange={(e) => setJobInterest(e.target.value)}
+                    required
+                  />
+                </InputBlock>
+
+                <InputBlock>
+                  <InputTitle>
+                    <Req>*</Req>보유 역량
+                  </InputTitle>
+                  <input
+                    type="text"
+                    name="skills"
+                    value={skills}
+                    onChange={(e) => setSkills(e.target.value)}
+                    required
+                  />
+                </InputBlock>
+
+                <InputBlock>
+                  <InputTitle>간단한 자기소개</InputTitle>
+                  <input
+                    name="intro"
+                    value={intro}
+                    onChange={(e) => setIntro(e.target.value)}
+                  />
+                </InputBlock>
+
+                <InputBlock>
+                  <InputTitle>이력서 첨부</InputTitle>
+                  <input
+                    type="file"
+                    name="resume"
+                    accept=".pdf"
+                    onChange={(e) => setResume(e.target.files[0])}
+                  />
+                </InputBlock>
+              </>
+            )}
+
+            <ButtonRow>
+              {/* 버튼 문구도 역할별 */}
+              <Button
+                text={`${roleText}으로 회원가입`}
+                reverse={reverse}
+                type="submit"
+              />
+            </ButtonRow>
+          </Form>
+        </InputWrapper>
+      </JoinWrapper>
+    </>
+  );
 }
 
+
+
 const JoinWrapper = styled.div`
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;
+
 const Title = styled.div`
-    width: 100%;
-    text-align: center;
-    margin-bottom: 28px;
-    margin-top: 24px;
+  width: 100%;
+  text-align: center;
+  margin: clamp(16px, 5vw, 24px) 0 clamp(20px, 5vw, 28px) 0;
 
-    h1 {
-        font-family: "Pretendard-SemiBold";
-        font-size: 20px;
-        color: #111111;
-    }
+  h1 {
+    font-family: "Pretendard-SemiBold";
+    font-size: clamp(16px, 5vw, 20px);
+    color: #111111;
+  }
 
-    h6 {
-        font-family: "Pretendard-Medium";
-        font-size: 13px;
-        color: #999999;
-    }
-`
+  h6 {
+    font-family: "Pretendard-Medium";
+    font-size: clamp(11px, 3.5vw, 13px);
+    color: #999999;
+  }
+`;
 
 const InputWrapper = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 `;
 
 const Form = styled.form`
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    margin-bottom: 80px;
-    /* padding: 0 1rem; */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: clamp(40px, 17vw, 80px);
 `;
 
 const InputBlock = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0 1rem;
 
-    input {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #999999;
-        border-radius: 8px;
+  input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #999999;
+    border-radius: 8px;
 
-        font-size: 14px;
-        font-family: "Pretendard-Regular";
-        box-sizing: border-box;
-    }
+    font-size: clamp(13px, 3.5vw, 14px);
+    font-family: "Pretendard-Regular";
+    box-sizing: border-box;
+  }
 `;
 
 const Req = styled.span`
@@ -254,22 +309,24 @@ const Req = styled.span`
 `;
 
 const InputTitle = styled.label`
-    font-size: 14px;
-    font-family: "Pretendard-Regular";
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 4px;
+  font-size: clamp(13px, 3.5vw, 14px);
+  font-family: "Pretendard-Regular";
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
 `;
 
+/* 역할에 따라 구분선 색을 달리하고 싶다면 $role을 사용 */
 const DivideLine = styled.div`
-    width: 100%;
-    border: 1px solid #D9D9D9;
-    margin: 40px 0 20px 0;
-`
+  width: 100%;
+  border-top: 1px solid
+    ${({ $role }) => ($role === "owner" ? "#E5EAF6" : "#D9D9D9")};
+  margin: clamp(20px, 10vw, 40px) 0 clamp(10px, 5vw, 20px);
+`;
 
 const ButtonRow = styled.div`
-    padding: 0 1rem;
-    margin-top: 40px;
+  padding: 0 1rem;
+  margin-top: clamp(20px, 10vw, 40px);
 `;
