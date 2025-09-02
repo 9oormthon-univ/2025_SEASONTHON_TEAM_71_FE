@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Button } from "../../components/Button";
+import useAuthStore from "../../stores/authStore";
 
 const LoginWrapper = styled.div`
   display: flex;
@@ -94,6 +95,9 @@ export default function Login() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
 
+  const login = useAuthStore((s) => s.login);
+  const role  = useAuthStore((s) => s.role);
+
   const handleLogin = () => {
     if (!id.trim()) {
       alert("아이디를 입력해주세요.");
@@ -105,7 +109,15 @@ export default function Login() {
       return;
     }
 
-    navigate("/home");
+    login({
+      token: "mock-token",                // 임시 토큰
+      user:  { id, name: id || "Guest" }, // 임시 유저
+      role:  role,                        // 현재 전역 role 사용 ('user' | 'owner')
+    });
+
+    //TODO : 로그인 API 연결
+
+    navigate("/");
   };
 
   return (
@@ -147,7 +159,7 @@ export default function Login() {
       <LoginBtn>
         <Button text="로그인" reverse onClick={handleLogin} />
       </LoginBtn>
-      <SignupText onClick={() => navigate("/join")}>회원가입</SignupText>
+      <SignupText onClick={() => navigate("/join/category")}>회원가입</SignupText>
     </LoginWrapper>
   );
 }

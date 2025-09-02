@@ -5,12 +5,16 @@ import styled from "styled-components";
 import HomeHeader from "../components/HomeHeader";
 import Footer from "../components/Footer";
 import { MainContainer } from "../styles/MainContainer.style";
+import useAuthStore from "../stores/authStore";
 
 export default function MainLayout() {
+
+  const { isLoggedIn, logout } = useAuthStore();
+
   return (
     <OuterWrapper>
       <LayoutWrapper>
-        <HomeHeader />
+        <HomeHeader isLoggedIn={isLoggedIn} onLogout={logout} />
         <MainContainer>
           <Outlet />
         </MainContainer>

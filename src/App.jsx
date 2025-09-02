@@ -23,8 +23,9 @@ function App() {
 
       {/* MainLayout 상속받는 그룹*/}
       <Route element={<MainLayout />}>
-        {/* <Route index element={<Home />} /> */}
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/:role/jobs" element={<div>Jobs Page</div>} />
+        <Route path="/:role/ai-matching" element={<div>AI Matching Page</div>} />
       </Route>
     </Routes>
   );
