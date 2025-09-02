@@ -71,20 +71,20 @@ const HomeHeaderWrapper = styled.header`
   display: flex;
   justify-content: center;
   width: 100%;
-  height: 56px;
+  height: clamp(48px, 14vw, 56px);
   border: none;
 `;
 
 const ContentWrapper = styled.div`
-  width: min(1024px, 100%);
+  width: clamp(344px, 100%, 1024px);
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 0 12px;
+  gap: clamp(8px, 2vw, 16px);
+  padding: 0 clamp(8px, 3vw, 12px);
 
   img {
-    width: 40px;
-    height: 40px;
+    width: clamp(28px, 9vw, 40px);
+    height: clamp(28px, 9vw, 40px);
     cursor: pointer;
   }
 `;
@@ -99,18 +99,19 @@ const ContentText = styled.nav`
 const Menu = styled.div`
   display: flex;
   align-items: center;
-  gap: 20px;
-  margin-left: 6px;
+  gap: clamp(12px, 4vw, 20px);
+  margin-left: clamp(0px, 1vw, 6px);
+  flex-wrap: wrap;
 `;
 
 const MenuItem = styled.button`
   position: relative;
   background: none;
   border: 0;
-  padding: 8px 2px;
-  font-size: 12px;
+  padding: clamp(4px, 1vw, 8px) clamp(2px, 1vw, 4px);
+  font-size: clamp(10px, 3vw, 12px);
   font-family: "Pretendard-Medium";
-  color: #111;
+  color: #111111;
   cursor: pointer;
 
   /* 언더바 애니메이션 */
@@ -123,7 +124,7 @@ const MenuItem = styled.button`
     width: 100%;
     transform: scaleX(0);
     transform-origin: left center;
-    transition: transform 220ms ease;
+    transition: transform 250ms ease;
     background: #2b50ff;
     border-radius: 1px;
   }
@@ -140,16 +141,16 @@ const LoginState = styled.div`
   button {
     background: none;
     border: 0;
-    padding: 8px 4px;
-    font-size: 12px;
+    padding: clamp(4px, 1vw, 8px) clamp(2px, 1vw, 4px);
+    font-size: clamp(10px, 3vw, 12px);
     font-family: "Pretendard-Medium";
-    color: #111;
+    color: #111111;
     cursor: pointer;
   }
 `;
 
 const RoleBadge = styled.span`
-  font-size: 12px;
+  font-size: clamp(10px, 3vw, 12px);
   font-family: "Pretendard-Medium";
   color: #1f57ff;
 `;
