@@ -171,7 +171,7 @@ const Body = styled.div`
 const Track = styled.div`
     display: inline-flex;
     gap: 24px;
-    padding: 13px 48px 32px 48px;
+    padding: 13px 24px 32px 24px;
     /* padding-block: clamp(10px, 3vw, 13px) clamp(16px, 7vw, 32px);
     padding-inline: clamp(13px, 6vw, 48px); */
     min-width: max-content; /* 카드 총합만큼 너비 확보 */
