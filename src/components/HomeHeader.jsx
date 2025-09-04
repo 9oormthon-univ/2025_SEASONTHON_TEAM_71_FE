@@ -21,7 +21,8 @@ export default function HomeHeader() {
 
   const go = (to) => navigate(`/${role}${to}`, { replace: false });
   const isJobs = pathname.startsWith(`/${role}/jobs`);
-  const isMatch = pathname.startsWith(`/${role}/ai-matching`);
+  // const isMatch = pathname.startsWith(`/${role}/ai-matching`);
+  const isMatch = new RegExp(`^/${role}/ai-matching(?:$|/|-)`).test(pathname);
 
   return (
     <HomeHeaderWrapper>
@@ -125,7 +126,7 @@ const MenuItem = styled.button`
     transform: scaleX(0);
     transform-origin: left center;
     transition: transform 250ms ease;
-    background: #2b50ff;
+    background: #142CA6;
     border-radius: 1px;
   }
 
@@ -152,5 +153,5 @@ const LoginState = styled.div`
 const RoleBadge = styled.span`
   font-size: clamp(10px, 3vw, 12px);
   font-family: "Pretendard-Medium";
-  color: #1f57ff;
+  color: #142CA6;
 `;
