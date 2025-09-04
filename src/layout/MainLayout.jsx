@@ -8,7 +8,6 @@ import { MainContainer } from "../styles/MainContainer.style";
 import useAuthStore from "../stores/authStore";
 
 export default function MainLayout() {
-
   const { isLoggedIn, logout } = useAuthStore();
 
   return (
@@ -38,7 +37,7 @@ const OuterWrapper = styled.div`
 const LayoutWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
   background: #fff;
 
   width: min(390px, 100%);
