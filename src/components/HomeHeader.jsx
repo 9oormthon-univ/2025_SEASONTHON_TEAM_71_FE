@@ -32,7 +32,7 @@ export default function HomeHeader() {
           <Menu>
             <MenuItem
               className={isJobs ? "active" : ""}
-              onClick={() => go("/jobs")}
+              onClick={() => go("/joblist")}
               aria-current={isJobs ? "page" : undefined}
             >
               채용공고
