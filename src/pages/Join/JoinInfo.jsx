@@ -318,11 +318,9 @@ const InputTitle = styled.label`
   gap: 0.5rem;
 `;
 
-/* 역할에 따라 구분선 색을 달리하고 싶다면 $role을 사용 */
 const DivideLine = styled.div`
   width: 100%;
-  border-top: 1px solid
-    ${({ $role }) => ($role === "owner" ? "#E5EAF6" : "#D9D9D9")};
+  border-top: 1px solid #D9D9D9;
   margin: clamp(20px, 10vw, 40px) 0 clamp(10px, 5vw, 20px);
 `;
 
