@@ -36,6 +36,14 @@ const FooterWrapper = styled.div`
     @media (min-width: 390px) {
         width: min(390px, 100%);
     }
+
+    @media (min-width: 412px) {
+        width: min(412px, 100%);
+    }
+
+    @media (min-width: 430px) {
+        width: min(430px, 100%);
+    }
 `;
 const FooterText = styled.div`
     gap: 24px;

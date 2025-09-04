@@ -1,11 +1,20 @@
 // 홈 화면 입니다.
 import styled from "styled-components";
+import background from "../assets/img/background.png";
+import { useNavigate } from "react-router-dom";
+import useAuthStore from "../stores/authStore";
 
 export default function Home() {
+  const navigate = useNavigate();
+  const role = useAuthStore((state) => state.role);
+
   return ( 
     <HomeWrapper>
-      <div>갓잡을 통해 </div>
-      <div>채용 기회를 잡아보세요! </div>
+        <div>갓잡을 통해 </div>
+        <div>채용 기회를 잡아보세요! </div>
+        <button onClick={() => navigate(`/${role}/jobs`)}>
+          <p>채용공고 바로 구경하기</p>
+        </button>
     </HomeWrapper>
   );
 }
@@ -17,10 +26,34 @@ const HomeWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex: 1;
+  width: 100%;
+
+  background-image: url(${background});
+  background-size: cover;     /* 화면에 꽉 차게 */
+  background-position: center; /* 중앙 정렬 */
+  background-repeat: no-repeat;
 
   div {
-    color: #111111;
+    color: #FFFFFF;
     font-size: 24px;
     font-family: "Pretendard-SemiBold";
+    text-shadow: 0px 4px 8px #00000040;
+  }
+
+  button {
+    width: 335px;
+    height: 56px;
+    border: 2px solid #DCFFC0;
+    border-radius: 50px;
+    background-color: #142CA680;
+    margin-top: 20px;
+    box-shadow: inset 0px 3px 10px #DCFFC099;
+    filter: drop-shadow(0px 0px 40px rgba(0,0,0,0.25));
+
+    p {
+      font-size: 16px;
+      font-family: "Pretendard-SemiBold";
+      color: #DCFFC0;
+    }
   }
 `
