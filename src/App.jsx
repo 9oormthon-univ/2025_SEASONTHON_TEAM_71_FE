@@ -7,6 +7,11 @@ import Login from "./pages/Join/Login";
 import JoinCategory from "./pages/Join/JoinCategory";
 import JoinInfo from "./pages/Join/JoinInfo";
 
+import MatchingMain from "./pages/AIConsultant/MatchingMain";
+import MatchingResult from "./pages/AIConsultant/MatchingResult";
+
+import Chatting from "./pages/AIConsultant/Chatting";
+
 function App() {
   return (
     <Routes>
@@ -25,8 +30,11 @@ function App() {
       <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/:role/jobs" element={<div>Jobs Page</div>} />
-        <Route path="/:role/ai-matching" element={<div>AI Matching Page</div>} />
+        <Route path="/:role/ai-matching" element={<MatchingMain />} />
+        <Route path="/:role/ai-matching-result" element={<MatchingResult />} />
       </Route>
+
+      <Route path="/chatting" element={<Chatting />} />
     </Routes>
   );
 }
