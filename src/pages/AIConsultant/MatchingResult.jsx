@@ -57,7 +57,7 @@ export default function MatchingResult () {
     const [selected, setSelected] = useState(MOCK[0]?.id);
 
     const goChatting = () => {
-        navigate(`/chatting`);
+        navigate(`/chat`);
     }
 
     return (
