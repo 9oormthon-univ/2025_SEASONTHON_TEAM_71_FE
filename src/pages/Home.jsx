@@ -1,6 +1,6 @@
 // 홈 화면 입니다.
 import styled from "styled-components";
-import background from "../assets/img/background.png";
+import background from "../assets/img/background.svg";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../stores/authStore";
 

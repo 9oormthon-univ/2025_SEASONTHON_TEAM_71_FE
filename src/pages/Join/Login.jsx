@@ -5,10 +5,12 @@ import styled from "styled-components";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Button } from "../../components/Button";
 import useAuthStore from "../../stores/authStore";
+import MainLogo from "../../assets/img/main_logo.svg";
 
 const LoginWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   flex-grow: 1;
   padding: 24px;
@@ -16,16 +18,10 @@ const LoginWrapper = styled.div`
   box-sizing: border-box;
 `;
 
-const Logo = styled.div`
-  width: 100px;
-  height: 100px;
-  background: #ddd;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #fff;
-  font-size: 14px;
-  margin: 60px 0;
+const Logo = styled.img`
+  width: 204px;
+  height: 76.64x;
+  margin-bottom: 62.36px;
 `;
 
 const InputSection = styled.div`
@@ -123,7 +119,7 @@ export default function Login() {
   return (
     <LoginWrapper>
       {/* 로고 */}
-      <Logo>로고</Logo>
+      <Logo src={MainLogo}/>
 
       {/* 아이디+비번 */}
       <InputSection>

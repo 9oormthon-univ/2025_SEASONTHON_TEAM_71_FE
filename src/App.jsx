@@ -11,8 +11,6 @@ import Chat from "./pages/AIConsultant/Chat";
 import MatchingMain from "./pages/AIConsultant/MatchingMain";
 import MatchingResult from "./pages/AIConsultant/MatchingResult";
 
-import Chatting from "./pages/AIConsultant/Chatting";
-
 import JobList from "./pages/Jobs/JobList";
 import JobDetail from "./pages/Jobs/JobDetail";
 
@@ -40,8 +38,6 @@ function App() {
         <Route path="/:role/jobdetail" element={<JobDetail />} />
         <Route path="/chat" element={<Chat />} />
       </Route>
-
-      <Route path="/chatting" element={<Chatting />} />
     </Routes>
   );
 }
