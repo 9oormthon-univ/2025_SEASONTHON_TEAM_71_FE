@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { FaPlus } from "react-icons/fa6";
 import { IoIosSend } from "react-icons/io";
@@ -166,6 +166,13 @@ const messagesData = [
 export default function Chat() {
   const [messages, setMessages] = useState(messagesData);
   const [input, setInput] = useState("");
+  const chatBoxRef = useRef(null);
+
+  useEffect(() => {
+    if (chatBoxRef.current) {
+      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   const handleSend = () => {
     if (!input.trim()) return;
@@ -185,7 +192,7 @@ export default function Chat() {
 
   return (
     <ChatWrapper>
-      <ChatBox>
+      <ChatBox ref={chatBoxRef}>
         {/* 컨설턴트 이름 */}
         <OwnerContent>
           <ProfileImage />
@@ -220,6 +227,12 @@ export default function Chat() {
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
+              }
+            }}
             placeholder="메시지를 입력하세요"
           />
           <SendIcon onClick={handleSend}>
