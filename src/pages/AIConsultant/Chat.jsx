@@ -23,12 +23,20 @@ const OwnerContent = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 16px;
+  padding: 8px 12px;
   margin: 12px auto;
   background-color: #e7eaf6;
   border: 1px solid #142ca6;
   border-radius: 100px;
   width: fit-content;
+
+  @media (max-width: 375px) {
+    padding: 6px 12px;
+  }
+
+  @media (max-width: 359px) {
+    padding: 4px 10px;
+  }
 `;
 
 const ProfileImage = styled.img`
