@@ -12,7 +12,7 @@ export default function Home() {
     <HomeWrapper>
         <div>갓잡을 통해 </div>
         <div>채용 기회를 잡아보세요! </div>
-        <button onClick={() => navigate(`/${role}/jobs`)}>
+        <button onClick={() => navigate(`/${role}/joblist`)}>
           <p>채용공고 바로 구경하기</p>
         </button>
     </HomeWrapper>

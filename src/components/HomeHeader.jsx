@@ -24,6 +24,8 @@ export default function HomeHeader() {
   // const isMatch = pathname.startsWith(`/${role}/ai-matching`);
   const isMatch = new RegExp(`^/${role}/ai-matching(?:$|/|-)`).test(pathname);
 
+  const accent = role === "owner" ? "#5697E1" : "#142CA6";
+
   return (
     <HomeHeaderWrapper>
       <ContentWrapper>
@@ -31,14 +33,16 @@ export default function HomeHeader() {
         <ContentText>
           <Menu>
             <MenuItem
+              $accent={accent} 
               className={isJobs ? "active" : ""}
-              onClick={() => go("/jobs")}
+              onClick={() => go("/joblist")}
               aria-current={isJobs ? "page" : undefined}
             >
               채용공고
             </MenuItem>
 
             <MenuItem
+              $accent={accent} 
               className={isMatch ? "active" : ""}
               onClick={() => go("/ai-matching")}
               aria-current={isMatch ? "page" : undefined}
@@ -51,12 +55,12 @@ export default function HomeHeader() {
             {isLoggedIn ? (
               <>
                 <button type="button" onClick={logout}>로그아웃</button>
-                <RoleBadge>{role === "owner" ? "기업" : "개인"}</RoleBadge>
+                <RoleBadge $accent={accent}>{role === "owner" ? "기업" : "개인"}</RoleBadge>
               </>
             ) : (
               <>
                 <button type="button" onClick={() => navigate("/login")}>로그인</button>
-                <RoleBadge>{role === "owner" ? "기업" : "개인"}</RoleBadge>
+                <RoleBadge $accent={accent}>{role === "owner" ? "기업" : "개인"}</RoleBadge>
               </>
             )}
           </LoginState>
@@ -120,17 +124,17 @@ const MenuItem = styled.button`
     content: "";
     position: absolute;
     left: 0;
-    bottom: -2px;
+    bottom: -3px;
     height: 2px;
     width: 100%;
     transform: scaleX(0);
     transform-origin: left center;
     transition: transform 250ms ease;
-    background: #142CA6;
+    background: ${({ $accent }) => $accent};
     border-radius: 1px;
   }
 
-  &:hover::after { transform: scaleX(0.5); }
+  &:hover::after { transform: scaleX(1); }
   &.active::after { transform: scaleX(1); }
 `;
 
@@ -153,5 +157,5 @@ const LoginState = styled.div`
 const RoleBadge = styled.span`
   font-size: clamp(10px, 3vw, 12px);
   font-family: "Pretendard-Medium";
-  color: #142CA6;
+  color: ${({ $accent }) => $accent};
 `;

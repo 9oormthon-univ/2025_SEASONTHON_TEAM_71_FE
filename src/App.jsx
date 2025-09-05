@@ -11,6 +11,9 @@ import Chat from "./pages/AIConsultant/Chat";
 import MatchingMain from "./pages/AIConsultant/MatchingMain";
 import MatchingResult from "./pages/AIConsultant/MatchingResult";
 
+import JobList from "./pages/Jobs/JobList";
+import JobDetail from "./pages/Jobs/JobDetail";
+
 function App() {
   return (
     <Routes>
@@ -28,9 +31,11 @@ function App() {
       {/* MainLayout 상속받는 그룹*/}
       <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
-        <Route path="/:role/jobs" element={<div>Jobs Page</div>} />
         <Route path="/:role/ai-matching" element={<MatchingMain />} />
         <Route path="/:role/ai-matching-result" element={<MatchingResult />} />
+
+        <Route path="/:role/joblist" element={<JobList />} />
+        <Route path="/:role/jobdetail/:id" element={<JobDetail />} />
         <Route path="/chat" element={<Chat />} />
       </Route>
     </Routes>

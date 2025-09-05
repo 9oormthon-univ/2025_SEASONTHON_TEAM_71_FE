@@ -146,7 +146,7 @@ const Title = styled.div`
 const Scroller = styled.div`
     width: 100%;
     overflow-x: auto;    /* 가로 스크롤은 여기서만 생기도록 */
-    overflow-y: hidden;
+    /* overflow-y: hidden; */
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
 
@@ -164,7 +164,6 @@ const Body = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding-bottom: clamp(80px, 19vw, 132px);
 `
 
 /* 내용만큼 가로로 넓어지도록 */
@@ -185,7 +184,8 @@ const Card = styled.article`
     border: 4px solid #D9D9D9; /* 기본 보더 */
     border-radius: 24px;
     padding: 31px 0 0 0;
-    margin: 0;
+    box-sizing: border-box;
+    margin: 0px;
     box-shadow: 0 2px 12px rgba(0,0,0,0.08);
     cursor: pointer;
     position: relative;
@@ -248,6 +248,7 @@ const TagRow = styled.div`
 
 const Tag = styled.span`
     font-size: clamp(10px, 2.7vw, 12px);
+    /* font-size: clamp(7px, 2.5vw, 12px); */
     font-family: "Pretenard-Medium";
     padding: clamp(6px, 1.6vw, 8px) clamp(8px, 2.6vw, 12px);
     border-radius: 100px;
@@ -269,9 +270,9 @@ const Desc = styled.ul`
     font-family: "Pretendard-Regular";
     line-height: 1.4;
     letter-spacing: -2.5%;
-    li + li { 
+    /* li + li { 
         margin-top: 4px; 
-        }
+        } */
 `;
 
 const ButtonBar = styled.div`
