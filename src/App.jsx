@@ -7,6 +7,7 @@ import Login from "./pages/Join/Login";
 import JoinCategory from "./pages/Join/JoinCategory";
 import JoinInfo from "./pages/Join/JoinInfo";
 import Chat from "./pages/AIConsultant/Chat";
+import JobPost from "./pages/Company/JobPost";
 
 import MatchingMain from "./pages/AIConsultant/MatchingMain";
 import MatchingResult from "./pages/AIConsultant/MatchingResult";
@@ -37,6 +38,7 @@ function App() {
         <Route path="/:role/joblist" element={<JobList />} />
         <Route path="/:role/jobdetail/:id" element={<JobDetail />} />
         <Route path="/chat" element={<Chat />} />
+        <Route path="/jobpost" element={<JobPost />} />
       </Route>
     </Routes>
   );
