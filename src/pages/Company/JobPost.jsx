@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { FaCirclePlus } from "react-icons/fa6";
+import { IoMdArrowDropdown } from "react-icons/io";
 
 const JobPostWrapper = styled.div`
   display: flex;
@@ -42,22 +43,38 @@ const FormContent = styled.div`
 
 const DropdownContainer = styled.div`
   margin-bottom: 8px;
+  position: relative;
 `;
 
 const Dropdown = styled.select`
   width: 100%;
   height: 48px;
-  padding: 0 8px;
+  padding: 0 40px 0 8px;
   border: 1px solid #999;
   border-radius: 8px;
   background-color: #ffffff;
   font-size: 13px;
   color: #999;
   cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 
   &:focus {
     outline: none;
   }
+`;
+
+const DropdownIcon = styled.div`
+  position: absolute;
+  right: 12px;
+  top: 0;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  color: #999;
 `;
 
 const Input = styled.input`
@@ -136,6 +153,9 @@ export default function JobPost() {
             <option value="fullstack">풀스택 개발자</option>
             <option value="designer">UI/UX디자이너</option>
           </Dropdown>
+          <DropdownIcon>
+            <IoMdArrowDropdown size={20} />
+          </DropdownIcon>
         </DropdownContainer>
         {/* 형태 선택 */}
         <DropdownContainer>
@@ -149,6 +169,9 @@ export default function JobPost() {
             <option value="intern">인턴</option>
             <option value="parttime">파트타임</option>
           </Dropdown>
+          <DropdownIcon>
+            <IoMdArrowDropdown size={20} />
+          </DropdownIcon>
         </DropdownContainer>
 
         {/* 기간 선택 */}
@@ -164,6 +187,9 @@ export default function JobPost() {
             <option value="6months">6개월</option>
             <option value="1year">1년</option>
           </Dropdown>
+          <DropdownIcon>
+            <IoMdArrowDropdown size={20} />
+          </DropdownIcon>
         </DropdownContainer>
 
         {/* 요구 역량 */}
