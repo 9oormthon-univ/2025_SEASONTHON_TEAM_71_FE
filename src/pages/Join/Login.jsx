@@ -6,6 +6,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Button } from "../../components/Button";
 import useAuthStore from "../../stores/authStore";
 import MainLogo from "../../assets/img/main_logo.svg";
+import useLogin from "../../api/login";
 
 const LoginWrapper = styled.div`
   display: flex;
@@ -88,30 +89,42 @@ export default function Login() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
-  const [id, setId] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const login = useAuthStore((s) => s.login);
+  const { login, isLoading, error } = useLogin();
   const role  = useAuthStore((s) => s.role);
 
-  const handleLogin = () => {
-    if (!id.trim()) {
-      alert("아이디를 입력해주세요.");
-      return;
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    console.log(username, password);
+
+    // if (!id.trim()) {
+    //   alert("아이디를 입력해주세요.");
+    //   return;
+    // }
+
+    // if (password.length < 8) {
+    //   alert("비밀번호는 8자 이상이어야 합니다.");
+    //   return;
+    // }
+
+    try {
+      const response = await login(username, password);
+      console.log("로그인 성공:", response);
+
+      if (response) {
+        localStorage.setItem("accessToken", response.result.accessToken);
+        localStorage.setItem("refreshToken", response.result.refreshToken);
+        alert("로그인에 성공했습니다.");
+        navigate("/");
+      } else {
+          alert(response.message);
+      }
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || "네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+      alert(`로그인 실패: ${errorMessage}`);
     }
-
-    if (password.length < 8) {
-      alert("비밀번호는 8자 이상이어야 합니다.");
-      return;
-    }
-
-    login({
-      token: "mock-token",                // 임시 토큰
-      user:  { id, name: id || "Guest" }, // 임시 유저
-      role:  role,                        // 현재 전역 role 사용 ('user' | 'owner')
-    });
-
-    //TODO : 로그인 API 연결
 
     navigate("/");
   };
@@ -128,8 +141,8 @@ export default function Login() {
           <Input
             type="text"
             placeholder="아이디를 입력하세요."
-            value={id}
-            onChange={(e) => setId(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
         </IDWrapper>
 

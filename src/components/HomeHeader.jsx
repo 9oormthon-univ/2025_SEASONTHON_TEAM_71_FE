@@ -16,7 +16,7 @@ export default function HomeHeader() {
   const storeRole  = useAuthStore(s => s.role);
   const setRole    = useAuthStore(s => s.setRole);
 
-  const role = (roleParam === "owner" || roleParam === "user") ? roleParam : storeRole;
+  const role = (roleParam === "company" || roleParam === "personal") ? roleParam : storeRole;
   if (role !== storeRole) setRole(role);
 
   const go = (to) => navigate(`/${role}${to}`, { replace: false });
@@ -24,7 +24,7 @@ export default function HomeHeader() {
   // const isMatch = pathname.startsWith(`/${role}/ai-matching`);
   const isMatch = new RegExp(`^/${role}/ai-matching(?:$|/|-)`).test(pathname);
 
-  const accent = role === "owner" ? "#5697E1" : "#142CA6";
+  const accent = role === "company" ? "#5697E1" : "#142CA6";
 
   return (
     <HomeHeaderWrapper>
@@ -55,12 +55,12 @@ export default function HomeHeader() {
             {isLoggedIn ? (
               <>
                 <button type="button" onClick={logout}>로그아웃</button>
-                <RoleBadge $accent={accent}>{role === "owner" ? "기업" : "개인"}</RoleBadge>
+                <RoleBadge $accent={accent}>{role === "company" ? "기업" : "개인"}</RoleBadge>
               </>
             ) : (
               <>
                 <button type="button" onClick={() => navigate("/login")}>로그인</button>
-                <RoleBadge $accent={accent}>{role === "owner" ? "기업" : "개인"}</RoleBadge>
+                <RoleBadge $accent={accent}>{role === "company" ? "기업" : "개인"}</RoleBadge>
               </>
             )}
           </LoginState>

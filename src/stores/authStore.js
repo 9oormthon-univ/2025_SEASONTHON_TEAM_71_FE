@@ -8,11 +8,11 @@ const useAuthStore = create(
       isLoggedIn: false,
       token: null,
       user: null, // 로그인한 사용자 정보 객체
-      role: "user", // "user" or "owner"
+      role: "personal",
 
       login: ({ token, user, role }) =>
         set({
-          isLoggedIn: true,
+          isLoggedIn: !!token,
           token: token ?? null,
           user: user ?? null,
           role: role ?? get().role,
@@ -23,11 +23,11 @@ const useAuthStore = create(
           isLoggedIn: false,
           token: null,
           user: null,
-          role: "user",
+          role: "personal",
         }),
 
       setRole: (role) => {
-        if (role === "user" || role === "owner") set({ role });
+        if (role === "personal" || role === "company") set({ role });
       },
     }),
     {

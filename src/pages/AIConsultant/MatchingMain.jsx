@@ -6,15 +6,15 @@ import useAuthStore from "../../stores/authStore";
 
 export default function MatchingMain () {
     const navigate = useNavigate();
-    const { role: roleParam } = useParams(); // e.g. /:role/...
+    const { role: roleParam } = useParams();
 
     const [loading, setLoading] = useState(false);
     const { role: storeRole, setRole } = useAuthStore();
 
     const role =
-        roleParam === "owner" || roleParam === "user"
+        roleParam === "company" || roleParam === "personal"
             ? roleParam
-            : storeRole || "user";
+            : storeRole || "personal";
 
     // 스토어와 URL 파라미터 동기화 (렌더 중 setRole 호출 금지 → effect에서)
     useEffect(() => {
