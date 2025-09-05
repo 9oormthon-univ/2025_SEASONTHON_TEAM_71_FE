@@ -2,12 +2,14 @@ import styled from "styled-components";
 import { useState } from "react";
 import { FaCirclePlus } from "react-icons/fa6";
 import { IoMdArrowDropdown } from "react-icons/io";
+import { Button } from "../../components/Button";
 
 const JobPostWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 100%;
+  overflow-y: auto;
 `;
 
 const CompanyInfo = styled.div`
@@ -54,7 +56,7 @@ const Dropdown = styled.select`
   border-radius: 8px;
   background-color: #ffffff;
   font-size: 13px;
-  color: #999;
+  color: ${(props) => (props.value ? "#111" : "#999")};
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
@@ -100,7 +102,7 @@ const Input = styled.input`
 
 const DetailUploadArea = styled.div`
   width: 100%;
-  height: 74px;
+  height: 48px;
   background-color: #fff;
   border: 1px solid #999;
   border-radius: 12px;
@@ -121,6 +123,13 @@ const NoteText = styled.p`
   color: #666;
   text-align: right;
   margin-right: 8px;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  gap: 8px;
+  padding: 16px 20px;
+  margin-top: auto;
 `;
 
 export default function JobPost() {
@@ -208,6 +217,10 @@ export default function JobPost() {
       </FormContent>
 
       {/* 취소/등록 버튼 */}
+      <ButtonContainer>
+        <Button text="취소하기" cancel={true} />
+        <Button text="등록하기" />
+      </ButtonContainer>
     </JobPostWrapper>
   );
 }
