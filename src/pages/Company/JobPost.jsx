@@ -137,15 +137,48 @@ export default function JobPost() {
   const [selectedType, setSelectedType] = useState("");
   const [selectedPeriod, setSelectedPeriod] = useState("");
   const [skills, setSkills] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedImage(file);
+    }
+  };
+
+  const handleImageClick = () => {
+    document.getElementById("image-upload").click();
+  };
 
   return (
     <JobPostWrapper>
       {/* 기업정보 */}
       <CompanyInfo>
         <CompanyName>네오테크(NeTech)</CompanyName>
-        <ImgUpload>
-          <FaCirclePlus size={24} color="#fff" />
+        {/* 이미지 업로드 */}
+        <ImgUpload onClick={handleImageClick}>
+          {selectedImage ? (
+            <img
+              src={URL.createObjectURL(selectedImage)}
+              alt="업로드된 이미지"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: "8px",
+              }}
+            />
+          ) : (
+            <FaCirclePlus size={24} color="#fff" />
+          )}
         </ImgUpload>
+        <input
+          id="image-upload"
+          type="file"
+          accept="image/*"
+          onChange={handleImageUpload}
+          style={{ display: "none" }}
+        />
       </CompanyInfo>
 
       {/* 직무/형태/기간 선택 */}
