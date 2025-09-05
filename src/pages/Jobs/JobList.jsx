@@ -1,15 +1,23 @@
 import styled from "styled-components"
 import { useState, useMemo } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import useAuthStore from "../../stores/authStore";
+
+import { Button } from "../../components/Button";
 import JobCard from "../../components/JobCard";
+
 import ex1 from "../../assets/img/ex1.svg"
 import ex2 from "../../assets/img/ex2.svg"
 import readingglasses from "../../assets/img/readingglasses.svg";
-import useAuthStore from "../../stores/authStore";
-import { Button } from "../../components/Button";
 
 export default function JobList ({ onSearch }) {
-    const role = useAuthStore((s) => s.role); 
+    const navigate = useNavigate();
+    const { role: roleFromUrl } = useParams();
+
+    const storeRole = useAuthStore((s) => s.role); 
+    const role = roleFromUrl || storeRole;
     const isOwner = role === "owner";
+
     const { user } = useAuthStore();
     const userName = user?.name || "사용자";
 
@@ -46,6 +54,45 @@ export default function JobList ({ onSearch }) {
         []
     );
 
+    // 데모용 데이터 (API 연동 시 교체)
+    const jobs = useMemo(
+        () => [
+            {
+                id: "j1",
+                companyName: "기업이름",
+                title: "직무명직무명",
+                summary: "체험형 | 채용기간 | 요구역량및스킬키워드요약요구역량",
+                logoUrl: ex1,
+            },
+            {
+                id: "j2",
+                companyName: "기업이름",
+                title: "직무명직무명",
+                summary: "체험형 | 채용기간 | 요구역량및스킬키워드요약요구역량",
+                logoUrl: ex2,
+            },
+            {
+                id: "j3",
+                companyName: "기업이름",
+                title: "직무명직무명",
+                summary: "체험형 | 채용기간 | 요구역량및스킬키워드요약요구역량",
+                logoUrl: ex2,
+            },
+            {
+                id: "j4",
+                companyName: "기업이름",
+                title: "직무명직무명",
+                summary: "체험형 | 채용기간 | 요구역량및스킬키워드요약요구역량",
+                logoUrl: ex2,
+            },
+        ],
+        []
+    );
+
+    const goDetail = (job) => {
+        navigate(`/${role}/jobdetail/${job.id}`, { state: { job } });
+    };
+
     return (
         <JobListWrapper>
             {isOwner ? (
@@ -57,14 +104,14 @@ export default function JobList ({ onSearch }) {
 
                     <MyLists>
                         {myJobs.map((j) => (
-                        <JobCard
-                            key={j.id}
-                            companyName={j.companyName}
-                            title={j.title}
-                            summary={j.summary}
-                            logoUrl={j.logoUrl}
-                            onClick={() => console.log("my job click:", j.id)}
-                        />
+                            <JobCard
+                                key={j.id}
+                                companyName={j.companyName}
+                                title={j.title}
+                                summary={j.summary}
+                                logoUrl={j.logoUrl}
+                                onClick={() => goDetail(j)}
+                            />
                         ))}
                     </MyLists>
 
@@ -93,12 +140,14 @@ export default function JobList ({ onSearch }) {
                             title="직무명직무명"
                             summary="체험형 | 채용기간 | 요구역량및스킬키워드요약요구역량"
                             logoUrl={ex1}
+                            onClick={() => goDetail(jobs[0])}
                         />
                         <JobCard
                             companyName="기업이름"
                             title="직무명직무명"
                             summary="체험형 | 채용기간 | 요구역량및스킬키워드요약요구역량"
                             logoUrl={ex2}
+                            onClick={() => goDetail(jobs[1])}
                         />
                     </UserAIRecom>
                 </UserJobListHeader>
@@ -167,38 +216,17 @@ export default function JobList ({ onSearch }) {
 
                 {/* 공통: 결과 리스트 (데모) */}
                 <Lists>
-                    <JobCard
-                        companyName="기업이름"
-                        title="직무명직무명"
-                        summary="체험형 | 채용기간 | 요구역량및스킬키워드요약요구역량"
-                        logoUrl={ex1}
-                        onClick={() => console.log("job 1 click")}
-                        variant="default"
-                    />
-                    <JobCard
-                        companyName="기업이름"
-                        title="직무명직무명"
-                        summary="체험형 | 채용기간 | 요구역량및스킬키워드요약요구역량"
-                        logoUrl={ex2}
-                        onClick={() => console.log("job 2 click")}
-                        variant="default"
-                    />
-                    <JobCard
-                        companyName="기업이름"
-                        title="직무명직무명"
-                        summary="체험형 | 채용기간 | 요구역량및스킬키워드요약요구역량"
-                        logoUrl={ex2}
-                        onClick={() => console.log("job 2 click")}
-                        variant="default"
-                    />
-                    <JobCard
-                        companyName="기업이름"
-                        title="직무명직무명"
-                        summary="체험형 | 채용기간 | 요구역량및스킬키워드요약요구역량"
-                        logoUrl={ex2}
-                        onClick={() => console.log("job 2 click")}
-                        variant="default"
-                    />
+                    {jobs.map((job) => (
+                        <JobCard
+                            key={job.id}
+                            companyName={job.companyName}
+                            title={job.title}
+                            summary={job.summary}
+                            logoUrl={job.logoUrl}
+                            onClick={() => goDetail(job)}
+                            variant="default"
+                        />
+                    ))}
                 </Lists>
             </BodyWrapper>
         </JobListWrapper>

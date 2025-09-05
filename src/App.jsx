@@ -35,7 +35,7 @@ function App() {
         <Route path="/:role/ai-matching-result" element={<MatchingResult />} />
 
         <Route path="/:role/joblist" element={<JobList />} />
-        <Route path="/:role/jobdetail" element={<JobDetail />} />
+        <Route path="/:role/jobdetail/:id" element={<JobDetail />} />
         <Route path="/chat" element={<Chat />} />
       </Route>
     </Routes>
