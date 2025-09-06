@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useEffect } from "react";
 import MainLayout from "./layout/MainLayout";
 import JoinLayout from "./layout/JoinLayout";
 import ChatLayout from "./layout/ChatLayout";
@@ -17,15 +16,7 @@ import MatchingResult from "./pages/AIConsultant/MatchingResult";
 import JobList from "./pages/Jobs/JobList";
 import JobDetail from "./pages/Jobs/JobDetail";
 
-import useAuthStore from "./stores/authStore";
-
 function App() {
-  const { setHydrated } = useAuthStore();
-
-  useEffect(() => {
-    // Zustand persist hydration 완료 표시
-    setHydrated(true);
-  }, [setHydrated]);
   return (
     <Routes>
       {/* JoinLayout 상속받는 그룹*/}

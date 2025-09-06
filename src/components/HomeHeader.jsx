@@ -15,7 +15,6 @@ export default function HomeHeader() {
   const logout = useAuthStore((s) => s.logout);
   const storeRole = useAuthStore((s) => s.role);
   const setRole = useAuthStore((s) => s.setRole);
-  const user = useAuthStore((s) => s.user);
 
   useEffect(() => {
     if (roleParam === "company" || roleParam === "personal") {
@@ -67,12 +66,6 @@ export default function HomeHeader() {
           <LoginState>
             {isLoggedIn ? (
               <>
-                <UserInfo>
-                  <span>
-                    안녕하세요, {user?.realName || user?.username || "사용자"}
-                    님!
-                  </span>
-                </UserInfo>
                 <button type="button" onClick={logout}>
                   로그아웃
                 </button>
@@ -182,16 +175,6 @@ const LoginState = styled.div`
     font-family: "Pretendard-Medium";
     color: #111111;
     cursor: pointer;
-  }
-`;
-
-const UserInfo = styled.div`
-  font-size: clamp(9px, 2.5vw, 11px);
-  font-family: "Pretendard-Medium";
-  color: #666666;
-
-  span {
-    white-space: nowrap;
   }
 `;
 
