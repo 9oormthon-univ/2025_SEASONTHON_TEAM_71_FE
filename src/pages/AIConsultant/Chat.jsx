@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { FaPlus } from "react-icons/fa6";
 import { IoIosSend } from "react-icons/io";
+import { IoIosArrowBack } from "react-icons/io";
+import consultant1 from "../../assets/img/consultant1.svg";
 
 const ChatWrapper = styled.div`
   display: flex;
@@ -9,9 +11,18 @@ const ChatWrapper = styled.div`
   height: 100%;
 `;
 
+const ChatHeader = styled.div`
+  height: 80px;
+  position: sticky;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 44px 0 20px;
+`;
+
 const ChatBox = styled.div`
   flex: 1;
-  padding: 16px;
+  padding: 16px 24px;
   overflow-y: auto;
   min-height: 0;
 `;
@@ -26,7 +37,7 @@ const OwnerContent = styled.div`
   padding: 8px 12px;
   margin: 12px auto;
   background-color: #e7eaf6;
-  border: 1px solid #142ca6;
+  border: 2px solid #142ca6;
   border-radius: 100px;
   width: fit-content;
 
@@ -87,6 +98,30 @@ const Bubble = styled.div`
   white-space: pre-wrap;
   font-size: 12px;
   line-height: 1.4;
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    ${({ isUser }) =>
+      isUser
+        ? `
+          right: -10px;
+          top: 10px;
+          border-left: 10px solid #142CA6;
+          border-top: 0px solid transparent;
+          border-bottom: 10px solid transparent;
+        `
+        : `
+          left: -10px;
+          top: 10px;
+          border-right: 10px solid #E0E0E0;
+          border-top: 0px solid transparent;
+          border-bottom: 10px solid transparent;
+        `}
+  }
 `;
 
 const Time = styled.span`
@@ -96,18 +131,21 @@ const Time = styled.span`
   padding: ${({ isUser }) => (isUser ? "0 4px 0 0" : "0 0 0 4px")};
 `;
 
+const ChatFooter = styled.div`
+  padding: 12px 24px;
+  border-top: 1px solid #d9d9d9;
+  background-color: #f5f5f6;
+`;
+
 const InputArea = styled.div`
   display: flex;
-  align-items: center;
   gap: 8px;
-  padding: 12px;
-  border-top: 1px solid #ddd;
-  background-color: #fff;
+  align-items: center;
 `;
 
 const PlusButton = styled.button`
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background-color: #e0e0e0;
   border: none;
@@ -122,6 +160,7 @@ const InputWrapper = styled.div`
   border-radius: 100px;
   padding: 0 8px;
   position: relative;
+  height: 36px;
 `;
 
 const Input = styled.input`
@@ -174,6 +213,7 @@ const messagesData = [
 export default function Chat() {
   const [messages, setMessages] = useState(messagesData);
   const [input, setInput] = useState("");
+  const [isComposing, setIsComposing] = useState(false);
   const chatBoxRef = useRef(null);
 
   useEffect(() => {
@@ -200,16 +240,19 @@ export default function Chat() {
 
   return (
     <ChatWrapper>
-      <ChatBox ref={chatBoxRef}>
+      <ChatHeader>
+        <IoIosArrowBack size={24} />
         {/* 컨설턴트 이름 */}
         <OwnerContent>
-          <ProfileImage />
+          <ProfileImage src={consultant1} />
           <OwnerInfo>
             <OwnerName>김현아</OwnerName>
             <OwnerEngName>(Hyeonah Kim)</OwnerEngName>
           </OwnerInfo>
         </OwnerContent>
+      </ChatHeader>
 
+      <ChatBox ref={chatBoxRef}>
         {messages.map((msg) => (
           <Message key={msg.id} isUser={msg.sender === "user"}>
             <MessageContent isUser={msg.sender === "user"}>
@@ -227,27 +270,31 @@ export default function Chat() {
         ))}
       </ChatBox>
 
-      <InputArea>
-        <PlusButton>
-          <FaPlus size={10} color="#999" />
-        </PlusButton>
-        <InputWrapper>
-          <Input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleSend();
-              }
-            }}
-            placeholder="메시지를 입력하세요"
-          />
-          <SendIcon onClick={handleSend}>
-            <IoIosSend size={18} color="#999" />
-          </SendIcon>
-        </InputWrapper>
-      </InputArea>
+      <ChatFooter>
+        <InputArea>
+          <PlusButton>
+            <FaPlus size={10} color="#999" />
+          </PlusButton>
+          <InputWrapper>
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey && !isComposing) {
+                  e.preventDefault();
+                  handleSend();
+                }
+              }}
+              onCompositionStart={() => setIsComposing(true)}
+              onCompositionEnd={() => setIsComposing(false)}
+              placeholder="메시지를 입력하세요"
+            />
+            <SendIcon onClick={handleSend}>
+              <IoIosSend size={18} color="#999" />
+            </SendIcon>
+          </InputWrapper>
+        </InputArea>
+      </ChatFooter>
     </ChatWrapper>
   );
 }
