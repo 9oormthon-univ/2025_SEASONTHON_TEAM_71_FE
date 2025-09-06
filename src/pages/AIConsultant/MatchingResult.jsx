@@ -3,6 +3,8 @@ import { useEffect, useLayoutEffect, useRef, useState, useMemo } from "react";
 import { Button } from "../../components/Button";
 import { useNavigate } from "react-router-dom";
 import consultant1 from "../../assets/img/consultant1.svg";
+import consultant2 from "../../assets/img/consultant2.svg";
+import consultant3 from "../../assets/img/consultant3.svg";
 
 const MOCK = [
   {
@@ -11,7 +13,7 @@ const MOCK = [
     nameEn: "Hyeonah Kim",
     org: "커리어브릿지 컨설팅 그룹",
     avatar: consultant1,
-    tags: ["취업전략 수립", "면접 코칭", "대학생/취준생 대상"],
+    tags: ["취업전략", "면접 코칭", "대학생/취준생 대상"],
     desc: [
       "한국대학교 경영학과 졸업",
       "네오전자 인사팀 근무 (HRD·채용 8년)",
@@ -23,28 +25,28 @@ const MOCK = [
     id: "2",
     nameKo: "이민수",
     nameEn: "Minsoo Lee",
-    org: "커리어브릿지 컨설팅 그룹",
-    avatar: consultant1,
-    tags: ["취업전략 수립", "면접 코칭", "대학생/취준생 대상"],
+    org: "넥스트커리어랩",
+    avatar: consultant2,
+    tags: ["이력서 코칭", "자기소개서", "대기업 취업 전략"],
     desc: [
-      "한국대학교 경영학과 졸업",
-      "네오전자 인사팀 근무 (HRD·채용 8년)",
-      "Mercer Korea 컨설팅 (5년)",
-      "커리어브릿지 시니어 컨설턴트 (2020~)",
+      "고려대학교 사회학과 졸업",
+      "한빛교육 취업지원센터 멘토 (5년)",
+      "청년희망재단 취업 컨설턴트 (4년)",
+      "넥스트커리어랩 컨설턴트 (2021~)",
     ],
   },
   {
     id: "3",
     nameKo: "박수민",
     nameEn: "Sumin Park",
-    org: "커리어브릿지 컨설팅 그룹",
-    avatar: consultant1,
-    tags: ["취업전략 수립", "면접 코칭", "대학생/취준생 대상"],
+    org: "비전커리어 컨설팅",
+    avatar: consultant3,
+    tags: ["취업 멘토링", "면접 스피치", "시니어 대상"],
     desc: [
-      "한국대학교 경영학과 졸업",
-      "네오전자 인사팀 근무 (HRD·채용 8년)",
-      "Mercer Korea 컨설팅 (5년)",
-      "커리어브릿지 시니어 컨설턴트 (2020~)",
+      "연세대학교 교육학과 졸업",
+      "삼성 청년 소프트웨어 아카데미(SSAFY) 취업 코치 (3년)",
+      "글로벌HRD 아카데미 강사 (4년)",
+      "비전커리어 시니어 컨설턴트 (2019~)",
     ],
   },
   // 필요한 만큼 추가...
