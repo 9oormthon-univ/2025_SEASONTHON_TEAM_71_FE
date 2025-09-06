@@ -4,6 +4,8 @@ import { FaPlus } from "react-icons/fa6";
 import { IoIosSend } from "react-icons/io";
 import { IoIosArrowBack } from "react-icons/io";
 import consultant1 from "../../assets/img/consultant1.svg";
+import { useNavigate } from "react-router-dom";
+import useAuthStore from "../../stores/authStore";
 
 const ChatWrapper = styled.div`
   display: flex;
@@ -211,6 +213,8 @@ const messagesData = [
 ];
 
 export default function Chat() {
+  const navigate = useNavigate();
+  const { role } = useAuthStore();
   const [messages, setMessages] = useState(messagesData);
   const [input, setInput] = useState("");
   const [isComposing, setIsComposing] = useState(false);
@@ -241,7 +245,10 @@ export default function Chat() {
   return (
     <ChatWrapper>
       <ChatHeader>
-        <IoIosArrowBack size={24} />
+        <IoIosArrowBack
+          size={24}
+          onClick={() => navigate(`/${role}/ai-matching-result`)}
+        />
         {/* 컨설턴트 이름 */}
         <OwnerContent>
           <ProfileImage src={consultant1} />

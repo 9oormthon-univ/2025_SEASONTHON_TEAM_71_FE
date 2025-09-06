@@ -6,7 +6,7 @@ import consultant1 from "../../assets/img/consultant1.svg";
 
 const MOCK = [
   {
-    consultantId: "1",
+    id: "1",
     nameKo: "김현아",
     nameEn: "Hyeonah Kim",
     org: "커리어브릿지 컨설팅 그룹",
@@ -20,7 +20,7 @@ const MOCK = [
     ],
   },
   {
-    consultantId: "2",
+    id: "2",
     nameKo: "이민수",
     nameEn: "Minsoo Lee",
     org: "커리어브릿지 컨설팅 그룹",
@@ -34,7 +34,7 @@ const MOCK = [
     ],
   },
   {
-    consultantId: "3",
+    id: "3",
     nameKo: "박수민",
     nameEn: "Sumin Park",
     org: "커리어브릿지 컨설팅 그룹",
