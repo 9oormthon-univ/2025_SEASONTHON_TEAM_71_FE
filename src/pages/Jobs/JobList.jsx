@@ -110,7 +110,7 @@ export default function JobList({ onSearch }) {
   });
 
   const goDetail = (job) => {
-    navigate(`/${role}/jobdetail/${job.id}`, { state: { job } });
+    navigate(`/${role}/jobdetail/${job.id}`, {state: {job}});
   };
 
   return (
@@ -153,20 +153,31 @@ export default function JobList({ onSearch }) {
           </UserHeaderTitleWrapper>
 
           <UserAIRecom>
-            <JobCard
+            {/* <JobCard
               companyName="기업이름"
               title="직무명직무명"
               summary="체험형 | 채용기간 | 요구역량및스킬키워드요약요구역량"
               logoUrl={ex1}
-              onClick={goDetail}
+              onClick={() => goDetail(j)}
             />
             <JobCard
               companyName="기업이름"
               title="직무명직무명"
               summary="체험형 | 채용기간 | 요구역량및스킬키워드요약요구역량"
               logoUrl={ex2}
-              onClick={goDetail}
-            />
+              onClick={() => goDetail(j)}
+            /> */}
+            
+            {myJobs.map((j) => (
+                <JobCard
+                    key={j.id}
+                    companyName={j.companyName}
+                    title={j.title}
+                    summary={j.summary}
+                    logoUrl={j.logoUrl}
+                    onClick={() => goDetail(j)}
+                />
+            ))}
           </UserAIRecom>
         </UserJobListHeader>
       )}
