@@ -165,7 +165,10 @@ export default function Login() {
       // 응답 로그(여러 형태 대비)
       console.groupCollapsed("[LOGIN] response");
       console.log("raw:", res);
-      console.log("res?.data:", res?.data);
+      console.log(
+        "res?.data:",
+        res?.data || "서버 응답에 data 속성 없음 (정상)"
+      );
       console.log(
         "token:",
         res?.token ??
@@ -176,10 +179,7 @@ export default function Login() {
       console.log("user:", res?.user ?? res?.data?.user);
       console.log(
         "role:",
-        res?.role ??
-          res?.data?.role ??
-          res?.user?.role ??
-          res?.data?.user?.role
+        res?.role ?? res?.data?.role ?? res?.user?.role ?? res?.data?.user?.role
       );
       console.groupEnd();
 
@@ -192,7 +192,6 @@ export default function Login() {
       alert("로그인에 성공했습니다.");
       navigate("/");
     } catch (err) {
-
       // 에러 상세 로그
       console.groupCollapsed("[LOGIN] error");
       console.error(err);
@@ -210,7 +209,7 @@ export default function Login() {
   return (
     <LoginWrapper>
       {/* 로고 */}
-      <Logo src={MainLogo}/>
+      <Logo src={MainLogo} />
 
       {/* 아이디+비번 */}
       <InputSection>
@@ -246,7 +245,9 @@ export default function Login() {
       <LoginBtn>
         <Button text="로그인" reverse onClick={handleLogin} />
       </LoginBtn>
-      <SignupText onClick={() => navigate("/join/category")}>회원가입</SignupText>
+      <SignupText onClick={() => navigate("/join/category")}>
+        회원가입
+      </SignupText>
     </LoginWrapper>
   );
 }
