@@ -5,16 +5,16 @@ import ex2 from "../assets/img/ex2.svg";
 export const myJobs = [
   {
     id: "1",
-    companyName: "네이버",
-    title: "프론트엔드 개발자",
-    summary: "정규직 | 상시채용 | React, TypeScript, Next.js",
+    companyName: "NeoTech",
+    title: "백엔드 개발자",
+    summary: "정규직 | ~09.17 | Spring Boot, Java, MySQL",
     logoUrl: ex1,
   },
   {
     id: "2",
-    companyName: "카카오",
+    companyName: "네이버",
     title: "백엔드 개발자",
-    summary: "정규직 | ~12.31 | Spring Boot, Java, MySQL",
+    summary: "정규직 | 상시채용 | Spring Boot, Java, MySQL",
     logoUrl: ex2,
   },
 ];
