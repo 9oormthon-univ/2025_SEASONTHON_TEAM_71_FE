@@ -7,10 +7,15 @@ const normalizeRole = (r) => (r === "company" || r === "personal" ? r : null);
 const useAuthStore = create(
   persist(
     (set, get) => ({
-      isLoggedIn: false, 
-      token: null, // Access Token
-      user: null, // 현재 로그인한 사용자 정보 객체
-      role: null,
+      isLoggedIn: true, // 테스트용으로 로그인 상태로 설정
+      token: "test-token-123", // 테스트용 토큰
+      user: {
+        username: "testuser",
+        userId: "1",
+        realName: "테스트 사용자",
+        email: "test@example.com",
+      }, // 테스트용 사용자 정보
+      role: "personal", // personal 역할로 설정
       hydrated: false,
 
       setHydrated: (v) => set({ hydrated: !!v }),
