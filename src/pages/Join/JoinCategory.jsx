@@ -50,7 +50,7 @@ const CircleBtn = styled.button`
     border-radius: 50%;
     border: none;
     background: ${({ $role }) =>
-        $role === "user"
+        $role === "personal"
             ? "#142CA6" // 개인
             : "#5697E1"}; // 기업
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
@@ -64,11 +64,11 @@ const CircleBtn = styled.button`
 
     img {
         width: ${({ $role }) =>
-            $role === "user"
+            $role === "personal"
                 ? "clamp(30px, 15vw, 47px)"
                 : "clamp(50px, 15vw, 78.22px)"};
         height: ${({ $role }) =>
-            $role === "user"
+            $role === "personal"
                 ? "clamp(36px, 12vw, 56.05px)"
                 : "clamp(40px, 12vw, 64px)"};
         margin-bottom: clamp(8px, 3vw, 12.3px);
@@ -108,11 +108,11 @@ const JoinCategory = () => {
             </BtnWrapper> */}
 
             <BtnWrapper>
-                <CircleBtn $role="user" onClick={() => handleNext("user")}>
+                <CircleBtn $role="personal" onClick={() => handleNext("personal")}>
                     <img src={UserIcon} alt="개인" />
                     <p>개인</p>
                 </CircleBtn>
-                <CircleBtn $role="owner" onClick={() => handleNext("owner")}>
+                <CircleBtn $role="company" onClick={() => handleNext("company")}>
                     <img src={CompanyIcon} alt="기업" />
                     <p>기업</p>
                 </CircleBtn>

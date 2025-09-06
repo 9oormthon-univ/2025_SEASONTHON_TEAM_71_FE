@@ -4,12 +4,15 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button } from "../../components/Button";
 import JoinHeader from "../../components/JoinHeader";
+import useSignup from "../../api/signup.js";
+import { useNavigate } from "react-router-dom";
 
 export default function JoinInfo() {
-  const { role } = useParams(); // 'user' or 'owner'
-  const isRole = role === "owner"; // 기업이면 true
-  const roleText = isRole ? "기업" : "개인"; // UI 표기용
-  const reverse = !isRole;
+  const navigate = useNavigate();
+  const { role } = useParams();
+  const isOwner = role === "company"; // 기업이면 true
+  const roleText = isOwner ? "기업" : "개인"; // UI 표기용
+  const reverse = !isOwner;
 
   // 공통 상태
   const [ID, setUserID] = useState("");
@@ -28,38 +31,66 @@ export default function JoinInfo() {
   // 기업용 상태
   const [organization, setOrganization] = useState(""); // 소속기관
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // 회원가입 api 커스텀 훅 사용
+  const { signup, isLoading, error } = useSignup();
 
-    if (password !== passwordConfirm) {
-      alert("비밀번호가 일치하지 않습니다.");
-      return;
-    }
+  const handleSignup = async (e) => {
+      e.preventDefault();
 
-    // 페이로드를 역할에 맞게 구성
-    const payload = isRole
-      ? {
-          role: "owner",
-          ID,
+      if (password !== passwordConfirm) {
+          alert("비밀번호가 일치하지 않습니다.");
+          return;
+      }
+
+      // 페이로드를 역할에 맞게 구성
+      // const payload = isRole
+      //   ? {
+      //       role: "owner",
+      //       ID,
+      //       password,
+      //       name,
+      //       organization,
+      //     }
+      //   : {
+      //       role: "user",
+      //       ID,
+      //       password,
+      //       name,
+      //       email,
+      //       phone,
+      //       jobInterest,
+      //       skills,
+      //       intro,
+      //       resume,
+      //     };
+
+      // 기본 payload
+      const payload = {
+          username: ID,
           password,
-          name,
-          organization,
+          email: isOwner ? null : email,
+          realName: name,
+          phone: isOwner ? null : phone,
+          role: isOwner ? "COMPANY" : "PERSONAL", 
+      };
+
+      try {
+        const response = await signup(payload);
+        console.log("회원가입 성공:", response);
+
+        if (response) {
+          navigate("/login");
+        } else {
+          alert(response?.message ?? "알 수 없는 오류");
         }
-      : {
-          role: "user",
-          ID,
-          password,
-          name,
-          email,
-          phone,
-          jobInterest,
-          skills,
-          intro,
-          resume,
-        };
-
-    console.log("submit payload:", payload);
-    // TODO: API 호출
+      } catch (err) {
+        console.error("signup error:", err?.response?.data || err);
+        const errorMessage =
+          err.response?.data?.message ||
+          err.response?.data?.data || 
+          "네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+        alert(`회원가입 실패: ${errorMessage}`);
+      }
   };
 
   return (
@@ -74,7 +105,7 @@ export default function JoinInfo() {
         </Title>
 
         <InputWrapper>
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSignup}>
             {/* 공통: 아이디/비밀번호 */}
             <InputBlock>
               <InputTitle>
@@ -85,7 +116,7 @@ export default function JoinInfo() {
                 name="ID"
                 value={ID}
                 onChange={(e) => setUserID(e.target.value)}
-                autoComplete="ID"
+                autoComplete="username"
                 required
               />
             </InputBlock>
@@ -135,7 +166,7 @@ export default function JoinInfo() {
             </InputBlock>
 
             {/* 역할별 분기 */}
-            {isRole ? (
+            {isOwner ? (
               // 기업(OWNER): 소속기관만 추가 
               <InputBlock>
                 <InputTitle>
