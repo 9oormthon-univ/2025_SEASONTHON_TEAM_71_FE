@@ -85,48 +85,126 @@ const SignupText = styled.div`
   cursor: pointer;
 `;
 
+// export default function Login() {
+//   const navigate = useNavigate();
+
+//   const [ID, setUserID] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [showPassword, setShowPassword] = useState(false);
+
+//   const { login, isLoading, error } = useLogin();
+//   const role  = useAuthStore((s) => s.role);
+
+//   const handleLogin = async (e) => {
+//     e.preventDefault();
+
+//     // if (!id.trim()) {
+//     //   alert("아이디를 입력해주세요.");
+//     //   return;
+//     // }
+
+//     // if (password.length < 8) {
+//     //   alert("비밀번호는 8자 이상이어야 합니다.");
+//     //   return;
+//     // }
+
+//     const payload = {
+//           username: ID,
+//           password,
+//       };
+
+//     try {
+//       const response = await login(payload);
+//       console.log("로그인 성공:", response);
+
+//       if (response) {
+//         // localStorage.setItem("accessToken", response.result.accessToken);
+//         // localStorage.setItem("refreshToken", response.result.refreshToken);
+//         alert("로그인에 성공했습니다.");
+//         navigate("/");
+//       } else {
+//           alert(response.message);
+//       }
+//     } catch (err) {
+//       const errorMessage = err.response?.data?.message || "네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+//       alert(`로그인 실패: ${errorMessage}`);
+//     }
+//   };
 export default function Login() {
   const navigate = useNavigate();
+
+  const [ID, setUserID] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const { login, isLoading, error } = useLogin();
-  const role  = useAuthStore((s) => s.role);
+  const { login, isLoading } = useLogin();
+  const role = useAuthStore((s) => s.role); // 필요하면 사용
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log(username, password);
 
-    // if (!id.trim()) {
+    // if (!ID.trim()) {
     //   alert("아이디를 입력해주세요.");
     //   return;
     // }
-
     // if (password.length < 8) {
     //   alert("비밀번호는 8자 이상이어야 합니다.");
     //   return;
     // }
 
     try {
-      const response = await login(username, password);
-      console.log("로그인 성공:", response);
+      // 요청 로그
+      console.group("[LOGIN] request");
+      console.log("username:", ID);
+      console.log("password.length:", password.length);
+      console.groupEnd();
 
-      if (response) {
-        localStorage.setItem("accessToken", response.result.accessToken);
-        localStorage.setItem("refreshToken", response.result.refreshToken);
-        alert("로그인에 성공했습니다.");
-        navigate("/");
-      } else {
-          alert(response.message);
-      }
+      // 서버 호출
+      const res = await login({ username: ID, password });
+
+      // 응답 로그(여러 형태 대비)
+      console.groupCollapsed("[LOGIN] response");
+      console.log("raw:", res);
+      console.log("res?.data:", res?.data);
+      console.log(
+        "token:",
+        res?.token ??
+          res?.data?.token ??
+          res?.accessToken ??
+          res?.data?.accessToken
+      );
+      console.log("user:", res?.user ?? res?.data?.user);
+      console.log(
+        "role:",
+        res?.role ??
+          res?.data?.role ??
+          res?.user?.role ??
+          res?.data?.user?.role
+      );
+      console.groupEnd();
+
+      // 스토어 현재값도 확인
+      console.groupCollapsed("[STORE] after login()");
+      console.log("store.role:", useAuthStore.getState().role);
+      console.log("store.user:", useAuthStore.getState().user);
+      console.groupEnd();
+
+      alert("로그인에 성공했습니다.");
+      navigate("/");
     } catch (err) {
-      const errorMessage = err.response?.data?.message || "네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
-      alert(`로그인 실패: ${errorMessage}`);
-    }
 
-    navigate("/");
+      // 에러 상세 로그
+      console.groupCollapsed("[LOGIN] error");
+      console.error(err);
+      console.log("err.response?.data:", err?.response?.data);
+      console.groupEnd();
+
+      const msg =
+        err?.readableMessage ??
+        err?.response?.data?.message ??
+        "네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+      alert(`로그인 실패: ${msg}`);
+    }
   };
 
   return (
@@ -141,8 +219,8 @@ export default function Login() {
           <Input
             type="text"
             placeholder="아이디를 입력하세요."
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={ID}
+            onChange={(e) => setUserID(e.target.value)}
           />
         </IDWrapper>
 

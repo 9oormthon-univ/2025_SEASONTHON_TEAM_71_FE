@@ -10,10 +10,8 @@ const useSignup = () => {
         setIsLoading(true);
         setError(null);
         setData(null);
-        
-        // VITE 환경 변수를 사용하는 경우
-        // const API_URL = `${import.meta.env.VITE_BACKEND_BASE_URL}/api/auth/signup`;
-        const API_URL = `/api/auth/signup`;
+
+        const API_URL = `${import.meta.env.VITE_BACKEND_BASE_URL}/api/auth/signup`;
 
         try {
             const response = await axios.post(API_URL, userData, {
@@ -22,7 +20,6 @@ const useSignup = () => {
                 },
             });
 
-            // 응답 스키마 가드: { message, data, ... } 또는 { result, ... } 형태에 유연하게 대응
             const payload = response.data?.data ?? response.data?.result ?? response.data;
             setData(payload);
             return payload;

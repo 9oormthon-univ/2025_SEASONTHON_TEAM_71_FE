@@ -1,10 +1,10 @@
 // 로그인 후 페이지들 공통 헤더
 
-// HomeHeader.jsx
 import styled from "styled-components";
 import MainLogo from "../assets/img/main_logo.svg";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import useAuthStore from "../stores/authStore";
+import { useEffect } from "react";
 
 export default function HomeHeader() {
   const navigate = useNavigate();
@@ -16,15 +16,26 @@ export default function HomeHeader() {
   const storeRole  = useAuthStore(s => s.role);
   const setRole    = useAuthStore(s => s.setRole);
 
-  const role = (roleParam === "company" || roleParam === "personal") ? roleParam : storeRole;
-  if (role !== storeRole) setRole(role);
+  useEffect(() => {
+    if (roleParam === "company" || roleParam === "personal") {
+      if (storeRole !== roleParam) setRole(roleParam);
+    }
+  }, [roleParam, storeRole, setRole]);
+
+   const role =
+    roleParam === "company" || roleParam === "personal"
+      ? roleParam
+      : storeRole;
 
   const go = (to) => navigate(`/${role}${to}`, { replace: false });
-  const isJobs = pathname.startsWith(`/${role}/jobs`);
-  // const isMatch = pathname.startsWith(`/${role}/ai-matching`);
-  const isMatch = new RegExp(`^/${role}/ai-matching(?:$|/|-)`).test(pathname);
 
-  const accent = role === "company" ? "#5697E1" : "#142CA6";
+  // const isJobs = pathname.startsWith(`/${role}/jobs`);
+  // const isMatch = new RegExp(`^/${role}/ai-matching(?:$|/|-)`).test(pathname);
+  // const accent = role === "company" ? "#5697E1" : "#142CA6";
+  const isJobs  = role ? pathname.startsWith(`/${role}/jobs`) : false;
+  const isMatch = role ? new RegExp(`^/${role}/ai-matching(?:$|/|-)`).test(pathname) : false;
+  const accent  = role === "company" ? "#5697E1" : "#142CA6";
+  const roleLabel = role === "company" ? "기업" : role === "personal" ? "개인" : "역할미정";
 
   return (
     <HomeHeaderWrapper>
@@ -60,7 +71,7 @@ export default function HomeHeader() {
             ) : (
               <>
                 <button type="button" onClick={() => navigate("/login")}>로그인</button>
-                <RoleBadge $accent={accent}>{role === "company" ? "기업" : "개인"}</RoleBadge>
+                <button type="button" onClick={() => navigate("/join")}>회원가입</button>
               </>
             )}
           </LoginState>
