@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
 import JoinLayout from "./layout/JoinLayout";
+import ChatLayout from "./layout/ChatLayout";
 
 import Home from "./pages/Home";
 import Login from "./pages/Join/Login";
@@ -37,8 +38,12 @@ function App() {
 
         <Route path="/:role/joblist" element={<JobList />} />
         <Route path="/:role/jobdetail/:id" element={<JobDetail />} />
-        <Route path="/chat" element={<Chat />} />
         <Route path="/jobpost" element={<JobPost />} />
+      </Route>
+
+      {/* ChatLayout 상속받는 그룹*/}
+      <Route element={<ChatLayout />}>
+        <Route path="/chat" element={<Chat />} />
       </Route>
     </Routes>
   );
