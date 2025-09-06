@@ -6,7 +6,7 @@ import useAuthStore from "../stores/authStore";
 
 export default function Home() {
   const navigate = useNavigate();
-  const role = useAuthStore((state) => state.role);
+  const { role, isLoggedIn } = useAuthStore();
 
   return (
     <HomeWrapper>
@@ -18,8 +18,10 @@ export default function Home() {
         <h2>갓잡은 컨설턴트와 매칭해</h2>
         <h2>취업을 도와주는 서비스입니다.</h2>
       </div>
-      <button onClick={() => navigate(`/${role}/joblist`)}>
-        <p>채용공고 바로 구경하기</p>
+      <button
+        onClick={() => navigate(isLoggedIn ? `/${role}/joblist` : "/join")}
+      >
+        <p>{isLoggedIn ? "채용공고 바로 구경하기" : "바로 가입하기"}</p>
       </button>
       <h3>갓잡을 통해 285명의 구직자가 회사를 만났어요!</h3>
     </HomeWrapper>
