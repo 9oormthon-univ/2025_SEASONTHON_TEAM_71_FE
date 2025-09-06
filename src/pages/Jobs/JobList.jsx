@@ -1,237 +1,273 @@
-import styled from "styled-components"
+import styled from "styled-components";
 import { useState, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import useAuthStore from "../../stores/authStore";
 
 import { Button } from "../../components/Button";
 import JobCard from "../../components/JobCard";
+import { listJobs, parseJobsPayload } from "../../api/jobs"; // ✅ 추가
 
-import ex1 from "../../assets/img/ex1.svg"
-import ex2 from "../../assets/img/ex2.svg"
+import ex1 from "../../assets/img/ex1.svg";
+import ex2 from "../../assets/img/ex2.svg";
 import readingglasses from "../../assets/img/readingglasses.svg";
 
-export default function JobList ({ onSearch }) {
-    const navigate = useNavigate();
-    const { role: roleFromUrl } = useParams();
+export default function JobList({ onSearch }) {
+  const navigate = useNavigate();
+  const { role: roleFromUrl } = useParams();
 
-    const storeRole = useAuthStore((s) => s.role); 
-    const role = roleFromUrl || storeRole;
-    const isOwner = role === "owner";
+  const storeRole = useAuthStore((s) => s.role);
+  const role = roleFromUrl || storeRole;
+  const isOwner = role === "owner";
 
-    const { user } = useAuthStore();
-    const userName = user?.name || "사용자";
+  const { user } = useAuthStore();
+  const userName = user?.name || "사용자";
 
-    const [scope, setScope] = useState("all"); // 통합검색 종류
-    const [keyword, setKeyword] = useState("");
-    const [skill, setSkill] = useState("");
-    const [region, setRegion] = useState("");
-    const [detail, setDetail] = useState("");
+  const [scope, setScope] = useState("all");
+  const [keyword, setKeyword] = useState("");
+  const [skill, setSkill] = useState("");
+  const [region, setRegion] = useState("");
+  const [detail, setDetail] = useState("");
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const payload = { scope, keyword, skill, region, detail };
-        onSearch?.(payload);
+  // 검색 파라미터 & 페이지 상태
+  const [page, setPage] = useState(0);
+  const size = 10;
+  const [filters, setFilters] = useState({
+    q: undefined,
+    location: undefined,
+    employmentType: undefined,
+    status: undefined,
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const mergedKeyword = [keyword, skill].filter(Boolean).join(" ").trim();
+
+    setPage(0);
+    setFilters({
+      q: mergedKeyword || undefined,
+      location: region || undefined,
+      employmentType: detail || undefined,
+      status: undefined,
+    });
+
+    onSearch?.({ scope, keyword: mergedKeyword, skill, region, detail });
+  };
+
+  // 데이터 패칭 (React Query)
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["jobs", { ...filters, page, size }],
+    queryFn: async () => {
+      const res = await listJobs({ ...filters, page, size });
+      console.log("[/api/jobs] raw response:", res); // 디버깅
+      return parseJobsPayload(res); // ✅ 통일된 형태로 파싱
+    },
+    staleTime: 60_000,
+    keepPreviousData: true,
+  });
+
+  // ✅ 파싱된 데이터 사용
+  const serverContent = data?.content || [];
+  const totalPages = data?.totalPages ?? 1;
+
+  // (기업 전용) 데모 – 그대로 유지
+  const myJobs = useMemo(
+    () => [
+      {
+        id: "mj1",
+        companyName: "goormthon",
+        title: "프론트엔드 인턴",
+        summary: "체험형 | ~ 09.30 | React, TS",
+        logoUrl: ex1,
+      },
+      {
+        id: "mj2",
+        companyName: "Figma",
+        title: "UI Engineer",
+        summary: "정규직 | 상시 | React, Design System",
+        logoUrl: ex2,
+      },
+    ],
+    []
+  );
+
+  // 서버 응답 → JobCard용 맵핑 (필드 방어적으로 처리)
+  const jobs = serverContent.map((it) => {
+    const summaryParts = [
+      it.employmentType || it.type,
+      it.deadline ? `~ ${it.deadline}` : "",
+      it.location,
+    ].filter(Boolean);
+
+    return {
+      id: String(it.id ?? it.jobId ?? crypto.randomUUID()),
+      companyName: it.companyName || it.company?.name || "기업",
+      title: it.title || it.jobTitle || "채용공고",
+      summary: summaryParts.join(" | ") || (it.description ? String(it.description).slice(0, 60) : ""),
+      logoUrl: ex1,
+      _raw: it,
     };
+  });
 
-    // (데모) 기업 전용: 내 공고 목록 (나중에 API로 교체)
-    const myJobs = useMemo(
-        () => [
-            {
-                id: "mj1",
-                companyName: "goormthon",
-                title: "프론트엔드 인턴",
-                summary: "체험형 | ~ 09.30 | React, TS",
-                logoUrl: ex1,
-            },
-            {
-                id: "mj2",
-                companyName: "Figma",
-                title: "UI Engineer",
-                summary: "정규직 | 상시 | React, Design System",
-                logoUrl: ex2,
-            },
-        ],
-        []
-    );
+  const goDetail = (job) => {
+    navigate(`/${role}/jobdetail/${job.id}`, { state: { job } });
+  };
 
-    // 데모용 데이터 (API 연동 시 교체)
-    const jobs = useMemo(
-        () => [
-            {
-                id: "j1",
-                companyName: "기업이름",
-                title: "직무명직무명",
-                summary: "체험형 | 채용기간 | 요구역량및스킬키워드요약요구역량",
-                logoUrl: ex1,
-            },
-            {
-                id: "j2",
-                companyName: "기업이름",
-                title: "직무명직무명",
-                summary: "체험형 | 채용기간 | 요구역량및스킬키워드요약요구역량",
-                logoUrl: ex2,
-            },
-            {
-                id: "j3",
-                companyName: "기업이름",
-                title: "직무명직무명",
-                summary: "체험형 | 채용기간 | 요구역량및스킬키워드요약요구역량",
-                logoUrl: ex2,
-            },
-            {
-                id: "j4",
-                companyName: "기업이름",
-                title: "직무명직무명",
-                summary: "체험형 | 채용기간 | 요구역량및스킬키워드요약요구역량",
-                logoUrl: ex2,
-            },
-        ],
-        []
-    );
+  return (
+    <JobListWrapper>
+      {isOwner ? (
+        <OwnerJobListHeader>
+          <Title>
+            <p>나의 채용공고</p>
+          </Title>
 
-    const goDetail = (job) => {
-        navigate(`/${role}/jobdetail/${job.id}`, { state: { job } });
-    };
+          <MyLists>
+            {myJobs.map((j) => (
+              <JobCard
+                key={j.id}
+                companyName={j.companyName}
+                title={j.title}
+                summary={j.summary}
+                logoUrl={j.logoUrl}
+                onClick={() => goDetail(j)}
+              />
+            ))}
+          </MyLists>
 
-    return (
-        <JobListWrapper>
-            {isOwner ? (
-                // ====== 기업(OWNER) 전용 섹션 ======
-                <OwnerJobListHeader>
-                    <Title>
-                        <p>나의 채용공고</p>
-                    </Title>
+          <BtnWrapper>
+            <Button
+              type="button"
+              text="공고 등록하기"
+              reverse={false}
+              onClick={() => console.log("공고 등록하기 클릭")}
+            />
+          </BtnWrapper>
+        </OwnerJobListHeader>
+      ) : (
+        <UserJobListHeader>
+          <UserHeaderTitleWrapper>
+            <UserHeaderTitle>
+              <h4>AI가 분석한</h4>
+              <h1>{userName} 님에게 맞는 채용 공고</h1>
+            </UserHeaderTitle>
+          </UserHeaderTitleWrapper>
 
-                    <MyLists>
-                        {myJobs.map((j) => (
-                            <JobCard
-                                key={j.id}
-                                companyName={j.companyName}
-                                title={j.title}
-                                summary={j.summary}
-                                logoUrl={j.logoUrl}
-                                onClick={() => goDetail(j)}
-                            />
-                        ))}
-                    </MyLists>
+          <UserAIRecom>
+            <JobCard
+              companyName="기업이름"
+              title="직무명직무명"
+              summary="체험형 | 채용기간 | 요구역량및스킬키워드요약요구역량"
+              logoUrl={ex1}
+              onClick={goDetail}
+            />
+            <JobCard
+              companyName="기업이름"
+              title="직무명직무명"
+              summary="체험형 | 채용기간 | 요구역량및스킬키워드요약요구역량"
+              logoUrl={ex2}
+              onClick={goDetail}
+            />
+          </UserAIRecom>
+        </UserJobListHeader>
+      )}
 
-                    <BtnWrapper> 
-                        <Button
-                            type="button"
-                            text="공고 등록하기"
-                            reverse={false}
-                            onClick={() => console.log("공고 등록하기 클릭")}
-                        />
-                    </BtnWrapper>
-                </OwnerJobListHeader>
-            ) : (
-                // ====== owner가 아닐 때: Header + AI 추천 섹션 ======
-                <UserJobListHeader>
-                    <UserHeaderTitleWrapper>
-                        <UserHeaderTitle>
-                            <h4>AI가 분석한</h4>
-                            <h1>{userName} 님에게 맞는 채용 공고</h1>
-                        </UserHeaderTitle>
-                    </UserHeaderTitleWrapper>
+      <DivideLine />
 
-                    <UserAIRecom>
-                        <JobCard
-                            companyName="기업이름"
-                            title="직무명직무명"
-                            summary="체험형 | 채용기간 | 요구역량및스킬키워드요약요구역량"
-                            logoUrl={ex1}
-                            onClick={() => goDetail(jobs[0])}
-                        />
-                        <JobCard
-                            companyName="기업이름"
-                            title="직무명직무명"
-                            summary="체험형 | 채용기간 | 요구역량및스킬키워드요약요구역량"
-                            logoUrl={ex2}
-                            onClick={() => goDetail(jobs[1])}
-                        />
-                    </UserAIRecom>
-                </UserJobListHeader>
-            )}
+      <BodyWrapper>
+        <Title>
+          <p>채용공고 검색</p>
+        </Title>
 
-            <DivideLine />
+        <ToolBar>
+          <SearchBar onSubmit={handleSubmit}>
+            <ScopeSelect value={scope} onChange={(e) => setScope(e.target.value)}>
+              <option value="all">통합검색</option>
+            </ScopeSelect>
+            <Divider />
+            <KeywordInput
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              placeholder="키워드를 자유롭게 입력해보세요"
+            />
+            <SearchBtn type="submit" aria-label="검색">
+              <img src={readingglasses} />
+            </SearchBtn>
+          </SearchBar>
 
-            <BodyWrapper>
-                {/* ====== 공통: 검색 섹션 ====== */}
-                <Title>
-                    <p>채용공고 검색</p>
-                </Title>
-                <ToolBar>
-                    {/* 상단: 통합검색 + 키워드 */}
-                    <SearchBar onSubmit={handleSubmit}>
-                        <ScopeSelect value={scope} onChange={(e) => setScope(e.target.value)}>
-                            <option value="all">통합검색</option>
-                            {/* <option value="company">기업명</option>
-                            <option value="title">직무/공고명</option>
-                            <option value="tag">태그/스킬</option> */}
-                        </ScopeSelect>
-                        <Divider />
-                        <KeywordInput
-                            value={keyword}
-                            onChange={(e) => setKeyword(e.target.value)}
-                            placeholder="키워드를 자유롭게 입력해보세요"
-                        />
-                        <SearchBtn type="submit" aria-label="검색">
-                            {/* 돋보기 svg */}
-                            <img src={readingglasses} />
-                        </SearchBtn>
-                    </SearchBar>
+          <FilterRow>
+            <FilterSelect value={skill} onChange={(e) => setSkill(e.target.value)}>
+              <option value="">직무/스킬</option>
+              <option value="frontend">프론트엔드</option>
+              <option value="backend">백엔드</option>
+              <option value="data">데이터</option>
+              <option value="design">디자인</option>
+              <option value="react">React</option>
+              <option value="spring">Spring</option>
+              <option value="python">Python</option>
+            </FilterSelect>
 
-                    {/* 하단: 3가지 드롭다운 필터 */}
-                    <FilterRow>
-                        <FilterSelect value={skill} onChange={(e) => setSkill(e.target.value)}>
-                            <option value="">직무/스킬</option>
-                            <option value="frontend">프론트엔드</option>
-                            <option value="backend">백엔드</option>
-                            <option value="data">데이터</option>
-                            <option value="design">디자인</option>
-                            <option value="react">React</option>
-                            <option value="spring">Spring</option>
-                            <option value="python">Python</option>
-                        </FilterSelect>
+            <FilterSelect value={region} onChange={(e) => setRegion(e.target.value)}>
+              <option value="">지역</option>
+              <option value="seoul">서울</option>
+              <option value="gyeonggi">경기</option>
+              <option value="incheon">인천</option>
+              <option value="busan">부산</option>
+              <option value="remote">원격(재택)</option>
+            </FilterSelect>
 
-                        <FilterSelect value={region} onChange={(e) => setRegion(e.target.value)}>
-                            <option value="">지역</option>
-                            <option value="seoul">서울</option>
-                            <option value="gyeonggi">경기</option>
-                            <option value="incheon">인천</option>
-                            <option value="busan">부산</option>
-                            <option value="remote">원격(재택)</option>
-                        </FilterSelect>
+            <FilterSelect value={detail} onChange={(e) => setDetail(e.target.value)}>
+              <option value="">상세검색</option>
+              <option value="intern">인턴/체험형</option>
+              <option value="fulltime">정규직</option>
+              <option value="contract">계약직</option>
+              <option value="new">신입</option>
+              <option value="junior">주니어(1~3년)</option>
+            </FilterSelect>
+          </FilterRow>
+        </ToolBar>
 
-                        <FilterSelect value={detail} onChange={(e) => setDetail(e.target.value)}>
-                            <option value="">상세검색</option>
-                            <option value="intern">인턴/체험형</option>
-                            <option value="fulltime">정규직</option>
-                            <option value="contract">계약직</option>
-                            <option value="new">신입</option>
-                            <option value="junior">주니어(1~3년)</option>
-                        </FilterSelect>
-                    </FilterRow>
-                </ToolBar>
+        {/* 결과 리스트 */}
+        {isLoading && <p style={{ padding: 16 }}>불러오는 중...</p>}
+        {isError && (
+          <p style={{ padding: 16, color: "crimson" }}>
+            목록을 불러오는 중 오류가 발생했어요.
+            <br />
+            검색어/필터를 비우고 다시 시도해 보세요.
+          </p>
+        )}
 
-                {/* 공통: 결과 리스트 (데모) */}
-                <Lists>
-                    {jobs.map((job) => (
-                        <JobCard
-                            key={job.id}
-                            companyName={job.companyName}
-                            title={job.title}
-                            summary={job.summary}
-                            logoUrl={job.logoUrl}
-                            onClick={() => goDetail(job)}
-                            variant="default"
-                        />
-                    ))}
-                </Lists>
-            </BodyWrapper>
-        </JobListWrapper>
-    )
+        <Lists>
+          {!isLoading && !isError && jobs.length === 0 && (
+            <p style={{ padding: 16 }}>검색 결과가 없어요.</p>
+          )}
+          {jobs.map((job) => (
+            <JobCard
+              key={job.id}
+              companyName={job.companyName}
+              title={job.title}
+              summary={job.summary}
+              logoUrl={job.logoUrl}
+              onClick={() => goDetail(job)}
+              variant="default"
+            />
+          ))}
+        </Lists>
+
+        {/* 페이지네이션 */}
+        <div
+          style={{
+            display: "flex",
+            gap: 8,
+            justifyContent: "center",
+            padding: "12px 0 24px",
+          }}
+        >
+        </div>
+      </BodyWrapper>
+    </JobListWrapper>
+  );
 }
+
 
 const JobListWrapper = styled.div`
     width: 100%;
