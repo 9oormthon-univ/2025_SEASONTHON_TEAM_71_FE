@@ -4,8 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useAuthStore from "../../stores/authStore";
 import matchpending from "../../assets/img/matchpending.png";
-import pendingbg from "../../assets/img/pendingBg.png";
-import pendingshadow from "../../assets/img/pendingShadow.png";
+import pendingbg from "../../assets/img/PendingBg.png";
+import pendingshadow from "../../assets/img/pendingshadow.png";
 
 export default function MatchingMain() {
   const navigate = useNavigate();
