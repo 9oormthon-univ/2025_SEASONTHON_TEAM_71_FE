@@ -8,6 +8,9 @@ import pendingbg from "../../assets/img/pendingBg.png";
 import pendingshadow from "../../assets/img/pendingShadow.png";
 
 export default function MatchingMain() {
+  const { user } = useAuthStore();
+  const userName = user?.name || "사용자";
+
   const navigate = useNavigate();
   const { role: roleParam } = useParams(); // e.g. /:role/...
 
@@ -39,7 +42,7 @@ export default function MatchingMain() {
     <MatchingMainWrapper>
       <Body>
         <div>AI 분석을 통해</div>
-        <div>상이 님 역량에 적합한</div>
+        <div>{userName} 님 역량에 적합한</div>
         <div>취업 컨설턴트를 매칭할 수 있습니다</div>
       </Body>
 
