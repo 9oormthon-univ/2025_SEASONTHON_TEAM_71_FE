@@ -6,6 +6,7 @@ import useAuthStore from "../../stores/authStore";
 import JobCard from "../../components/JobCard";
 import { Button } from "../../components/Button";
 import Close from "../../assets/img/closebtn.svg";
+import Poster from "../../assets/img/poster.svg";
 
 export default function JobDetail() {
     const navigate = useNavigate();
@@ -32,7 +33,9 @@ export default function JobDetail() {
                 variant="default"
             />
 
-            <Description>채용직무 상세설명 첨부</Description>
+            <Description>
+                <img src={Poster} />
+            </Description>
 
             <FooterBar>
                 <Button 
@@ -73,11 +76,15 @@ const Description = styled.div`
     min-height: 398px;
     border: 1px solid #999999;
     border-radius: 12px;
-    background: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #111111;
+    img {
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+        object-fit: cover;
+    }
 `;
 
 const FooterBar = styled.div`

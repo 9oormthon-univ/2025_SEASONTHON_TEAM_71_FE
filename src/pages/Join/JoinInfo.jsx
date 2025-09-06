@@ -35,62 +35,63 @@ export default function JoinInfo() {
   const { signup, isLoading, error } = useSignup();
 
   const handleSignup = async (e) => {
-      e.preventDefault();
+    e.preventDefault();
 
       if (password !== passwordConfirm) {
           alert("비밀번호가 일치하지 않습니다.");
           return;
       }
 
-      // 페이로드를 역할에 맞게 구성
-      // const payload = isRole
-      //   ? {
-      //       role: "owner",
-      //       ID,
-      //       password,
-      //       name,
-      //       organization,
-      //     }
-      //   : {
-      //       role: "user",
-      //       ID,
-      //       password,
-      //       name,
-      //       email,
-      //       phone,
-      //       jobInterest,
-      //       skills,
-      //       intro,
-      //       resume,
-      //     };
+    // 페이로드를 역할에 맞게 구성
+    // const payload = isRole
+    //   ? {
+    //       role: "owner",
+    //       ID,
+    //       password,
+    //       name,
+    //       organization,
+    //     }
+    //   : {
+    //       role: "user",
+    //       ID,
+    //       password,
+    //       name,
+    //       email,
+    //       phone,
+    //       jobInterest,
+    //       skills,
+    //       intro,
+    //       resume,
+    //     };
 
-      // 기본 payload
-      const payload = {
-          username: ID,
-          password,
-          email: isOwner ? null : email,
-          realName: name,
-          phone: isOwner ? null : phone,
-          role: isOwner ? "COMPANY" : "PERSONAL", 
-      };
+    // 기본 payload
+    const payload = {
+      username: ID,
+      password,
+      email: isOwner ? null : email,
+      realName: name,
+      phone: isOwner ? null : phone,
+      role: isOwner ? "COMPANY" : "PERSONAL",
+    };
 
-      try {
-        const response = await signup(payload);
-        console.log("회원가입 성공:", response);
+    try {
+      const response = await signup(payload);
+      console.log("회원가입 성공:", response);
 
-        if (response) {
-          navigate("/login");
-        } else {
-          alert(response?.message ?? "알 수 없는 오류");
-        }
-      } catch (err) {
-        console.error("signup error:", err?.response?.data || err);
-        const errorMessage =
-          err.response?.data?.message ||
-          err.response?.data?.data || 
-          "네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
-        alert(`회원가입 실패: ${errorMessage}`);
+      if (response) {
+        navigate("/login");
+      } else {
+        alert(response?.message ?? "알 수 없는 오류");
       }
+    } catch (err) {
+      console.error("signup error:", err?.response?.data || err);
+      const errorMessage =
+        err.readableMessage ||
+        err.response?.data?.message ||
+        err.response?.data?.data ||
+        "네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+      alert(`회원가입 실패: ${errorMessage}`);
+    }
   };
 
   return (
@@ -167,7 +168,7 @@ export default function JoinInfo() {
 
             {/* 역할별 분기 */}
             {isOwner ? (
-              // 기업(OWNER): 소속기관만 추가 
+              // 기업(OWNER): 소속기관만 추가
               <InputBlock>
                 <InputTitle>
                   <Req>*</Req>소속기관
@@ -181,7 +182,7 @@ export default function JoinInfo() {
                 />
               </InputBlock>
             ) : (
-              // 개인(USER): 상세 필드들 
+              // 개인(USER): 상세 필드들
               <>
                 <InputBlock>
                   <InputTitle>
@@ -273,8 +274,6 @@ export default function JoinInfo() {
   );
 }
 
-
-
 const JoinWrapper = styled.div`
   flex: 1;
   display: flex;
@@ -335,7 +334,7 @@ const InputBlock = styled.div`
 `;
 
 const Req = styled.span`
-  color: #EB0000;
+  color: #eb0000;
   font-family: "Pretendard-Regular";
 `;
 
@@ -351,7 +350,7 @@ const InputTitle = styled.label`
 
 const DivideLine = styled.div`
   width: 100%;
-  border-top: 1px solid #D9D9D9;
+  border-top: 1px solid #d9d9d9;
   margin: clamp(20px, 10vw, 40px) 0 clamp(10px, 5vw, 20px);
 `;
 

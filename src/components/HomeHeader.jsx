@@ -11,10 +11,10 @@ export default function HomeHeader() {
   const { pathname } = useLocation();
   const { role: roleParam } = useParams();
 
-  const isLoggedIn = useAuthStore(s => s.isLoggedIn);
-  const logout     = useAuthStore(s => s.logout);
-  const storeRole  = useAuthStore(s => s.role);
-  const setRole    = useAuthStore(s => s.setRole);
+  const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
+  const logout = useAuthStore((s) => s.logout);
+  const storeRole = useAuthStore((s) => s.role);
+  const setRole = useAuthStore((s) => s.setRole);
 
   useEffect(() => {
     if (roleParam === "company" || roleParam === "personal") {
@@ -22,29 +22,30 @@ export default function HomeHeader() {
     }
   }, [roleParam, storeRole, setRole]);
 
-   const role =
-    roleParam === "company" || roleParam === "personal"
-      ? roleParam
-      : storeRole;
+  const role =
+    roleParam === "company" || roleParam === "personal" ? roleParam : storeRole;
 
   const go = (to) => navigate(`/${role}${to}`, { replace: false });
 
   // const isJobs = pathname.startsWith(`/${role}/jobs`);
   // const isMatch = new RegExp(`^/${role}/ai-matching(?:$|/|-)`).test(pathname);
   // const accent = role === "company" ? "#5697E1" : "#142CA6";
-  const isJobs  = role ? pathname.startsWith(`/${role}/jobs`) : false;
-  const isMatch = role ? new RegExp(`^/${role}/ai-matching(?:$|/|-)`).test(pathname) : false;
-  const accent  = role === "company" ? "#5697E1" : "#142CA6";
-  const roleLabel = role === "company" ? "기업" : role === "personal" ? "개인" : "역할미정";
+  const isJobs = role ? pathname.startsWith(`/${role}/jobs`) : false;
+  const isMatch = role
+    ? new RegExp(`^/${role}/ai-matching(?:$|/|-)`).test(pathname)
+    : false;
+  const accent = role === "company" ? "#5697E1" : "#142CA6";
+  const roleLabel =
+    role === "company" ? "기업" : role === "personal" ? "개인" : "역할미정";
 
   return (
     <HomeHeaderWrapper>
       <ContentWrapper>
-        <img src={MainLogo} alt="메인 로고" onClick={() => go("/")} />
+        <img src={MainLogo} alt="메인 로고" onClick={() => navigate("/")} />
         <ContentText>
           <Menu>
             <MenuItem
-              $accent={accent} 
+              $accent={accent}
               className={isJobs ? "active" : ""}
               onClick={() => go("/joblist")}
               aria-current={isJobs ? "page" : undefined}
@@ -53,7 +54,7 @@ export default function HomeHeader() {
             </MenuItem>
 
             <MenuItem
-              $accent={accent} 
+              $accent={accent}
               className={isMatch ? "active" : ""}
               onClick={() => go("/ai-matching")}
               aria-current={isMatch ? "page" : undefined}
@@ -65,13 +66,21 @@ export default function HomeHeader() {
           <LoginState>
             {isLoggedIn ? (
               <>
-                <button type="button" onClick={logout}>로그아웃</button>
-                <RoleBadge $accent={accent}>{role === "company" ? "기업" : "개인"}</RoleBadge>
+                <button type="button" onClick={logout}>
+                  로그아웃
+                </button>
+                <RoleBadge $accent={accent}>
+                  {role === "company" ? "기업" : "개인"}
+                </RoleBadge>
               </>
             ) : (
               <>
-                <button type="button" onClick={() => navigate("/login")}>로그인</button>
-                <button type="button" onClick={() => navigate("/join")}>회원가입</button>
+                <button type="button" onClick={() => navigate("/login")}>
+                  로그인
+                </button>
+                <button type="button" onClick={() => navigate("/join")}>
+                  회원가입
+                </button>
               </>
             )}
           </LoginState>
@@ -145,8 +154,12 @@ const MenuItem = styled.button`
     border-radius: 1px;
   }
 
-  &:hover::after { transform: scaleX(1); }
-  &.active::after { transform: scaleX(1); }
+  &:hover::after {
+    transform: scaleX(1);
+  }
+  &.active::after {
+    transform: scaleX(1);
+  }
 `;
 
 const LoginState = styled.div`

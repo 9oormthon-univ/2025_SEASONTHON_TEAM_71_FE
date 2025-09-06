@@ -69,6 +69,7 @@ const HomeWrapper = styled.div`
     margin-top: 60px;
     box-shadow: inset 0px 3px 10px #dcffc099;
     filter: drop-shadow(0px 0px 40px rgba(0, 0, 0, 0.25));
+    cursor: pointer;
 
     p {
       font-size: 16px;
