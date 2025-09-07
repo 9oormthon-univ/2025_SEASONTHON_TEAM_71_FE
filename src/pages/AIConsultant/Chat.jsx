@@ -11,6 +11,7 @@ const ChatWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  width: 100%;
 `;
 
 const ChatHeader = styled.div`
@@ -188,26 +189,26 @@ const messagesData = [
   {
     id: 1,
     sender: "user",
-    text: "선생님, 자기소개서 쓰다 보니 너무 뻔한 얘기 같아서 고민이에요🥺",
-    time: "오후 9:40",
+    text: "선생님, 자기소개서 쓰다 보니 너무 뻔한 얘기 같아서 고민이에요.",
+    time: "오전 7:35",
   },
   {
     id: 2,
     sender: "owner",
     text: '네, 지금 문장을 보면 "열심히 했다" 수준에 머물러 있어요.\n그건 기업 입장에서 전혀 설득력이 없습니다.',
-    time: "오후 9:41",
+    time: "오전 7:35",
   },
   {
     id: 3,
     sender: "owner",
     text: '자소서는 "팩트+성과+배운 점"\n3가지가 동시에 들어가야 해요.\n예를 들어 "팀워크를 발휘했다"는 말은 추상적이죠.',
-    time: "오후 9:41",
+    time: "오전 7:36",
   },
   {
     id: 4,
     sender: "owner",
     text: '"3명이 진행하던 프로젝트에서 일정 차질로 제가 기획과 자료 조사까지 맡아, 발표 점수 A+를 받았다. 이 과정에서 일정 관리 능력을 배웠다."\n이 정도 구체성은 나와야 기업이 평가합니다',
-    time: "오후 9:41",
+    time: "오전 7:36",
   },
   { id: 5, sender: "user", text: "감사합니다!!", time: "오후 9:42" },
 ];
@@ -215,7 +216,7 @@ const messagesData = [
 export default function Chat() {
   const navigate = useNavigate();
   const { role } = useAuthStore();
-  const [messages, setMessages] = useState(messagesData);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isComposing, setIsComposing] = useState(false);
   const chatBoxRef = useRef(null);
@@ -225,6 +226,26 @@ export default function Chat() {
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
   }, [messages]);
+
+  useEffect(() => {
+    const timer1 = setTimeout(() => {
+      setMessages(messagesData.slice(0, 2));
+    }, 10000);
+
+    const timer2 = setTimeout(() => {
+      setMessages(messagesData.slice(0, 3));
+    }, 15000);
+
+    const timer3 = setTimeout(() => {
+      setMessages(messagesData.slice(0, 4));
+    }, 20000);
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+    };
+  }, []);
 
   const handleSend = () => {
     if (!input.trim()) return;

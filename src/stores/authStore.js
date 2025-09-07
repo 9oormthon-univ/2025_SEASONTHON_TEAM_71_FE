@@ -7,7 +7,7 @@ const normalizeRole = (r) => (r === "company" || r === "personal" ? r : null);
 const useAuthStore = create(
   persist(
     (set, get) => ({
-      isLoggedIn: false, 
+      isLoggedIn: false,
       token: null, // Access Token
       user: null, // 현재 로그인한 사용자 정보 객체
       role: null,
